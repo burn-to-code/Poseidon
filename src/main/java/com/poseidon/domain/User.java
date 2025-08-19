@@ -1,0 +1,41 @@
+package com.poseidon.domain;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@RequiredArgsConstructor
+@Table(name = "users", schema = "demo")
+public class User {
+    @Id
+    @Column(name = "Id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+    @Size(max = 125)
+    @Column(name = "username", length = 125)
+    @NotBlank(message = "Username is mandatory")
+    private String username;
+
+    @Size(max = 125)
+    @Column(name = "password", length = 125)
+    @NotBlank(message = "Password is mandatory")
+    private String password;
+
+    @Size(max = 125)
+    @Column(name = "fullname", length = 125)
+    @NotBlank(message = "Fullname is mandatory")
+    private String fullname;
+
+    @Size(max = 125)
+    @Column(name = "role", length = 125)
+    @NotBlank(message = "Role is mandatory")
+    private String role;
+
+}
