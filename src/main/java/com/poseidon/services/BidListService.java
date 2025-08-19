@@ -21,4 +21,16 @@ public class BidListService {
         return bidList.stream()
                 .map(b -> new BidListResponse(b.getBidListId(), b.getAccount(), b.getType(), b.getBidQuantity())).toList();
     }
+
+    public BidList saveBidList(BidList bidList) {
+        if (bidList.getBidListId() == null) {
+            bidList.setCreationDate(new java.util.Date());
+            bidList.setCreationName("admin");
+        } else {
+            bidList.setRevisionDate(new java.util.Date());
+            bidList.setRevisionName("admin");
+        }
+
+        return bidListRepository.save(bidList);
+    }
 }

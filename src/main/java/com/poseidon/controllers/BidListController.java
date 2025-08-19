@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 
@@ -38,12 +35,11 @@ public class BidListController {
 
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return bid list
         if (result.hasErrors()) {
             return "bidList/add";
         }
 
-        bid.setCreationDate(new Date(System.currentTimeMillis()));
+        bidListService.saveBidList(bid);
 
         model.addAttribute("bidList", bidListService.getBidList());
         return "bidList/list";
