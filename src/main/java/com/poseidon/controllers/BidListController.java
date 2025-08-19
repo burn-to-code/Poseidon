@@ -22,7 +22,7 @@ public class BidListController {
     @RequestMapping("/bidList/list")
     public String home(Model model)
     {
-        List<BidListResponse> bidList = bidListService.getBidList();
+        List<BidListResponse> bidList = bidListService.getBidListForResponseList();
         model.addAttribute("bidList", bidList);
         return "bidList/list";
     }
@@ -41,26 +41,47 @@ public class BidListController {
 
         bidListService.saveBidList(bid);
 
-        model.addAttribute("bidList", bidListService.getBidList());
+        model.addAttribute("bidList", bidListService.getBidListForResponseList());
         return "bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Bid by Id and to model then show to the form
+        BidListResponse bidList;
+
+        try {
+            bidList = bidListService.getBidListByIdForResponse(id);
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/bidList/list";
+        }
+
+        model.addAttribute("bidList", bidList);
         return "bidList/update";
     }
 
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Bid and return list Bid
+        if (result.hasErrors()) {
+            return "bidList/update";
+        }
+
+        try {
+            bidListService.updateBidListById(id, bidList);
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "bidList/update";
+        }
+        model.addAttribute("bidList", bidListService.getBidListForResponseList());
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
+        bidListService.deleteBidListById(id);
+        model.addAttribute("bidList", bidListService.getBidListForResponseList());
         return "redirect:/bidList/list";
     }
 }

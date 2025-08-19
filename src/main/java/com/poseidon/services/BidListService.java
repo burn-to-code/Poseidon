@@ -15,7 +15,7 @@ public class BidListService {
     private final BidListRepository bidListRepository;
 
 
-    public List<BidListResponse> getBidList() {
+    public List<BidListResponse> getBidListForResponseList() {
         List<BidList> bidList = bidListRepository.findAll();
 
         return bidList.stream()
@@ -32,5 +32,23 @@ public class BidListService {
         }
 
         return bidListRepository.save(bidList);
+    }
+
+    public BidListResponse getBidListByIdForResponse(Integer id) {
+        BidList bidList = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
+
+        return new BidListResponse(bidList.getBidListId(), bidList.getAccount(), bidList.getType(), bidList.getBidQuantity());
+    }
+
+    public BidList updateBidListById(Integer id, BidList bidList) {
+        BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
+        bid.setAccount(bidList.getAccount());
+        bid.setType(bidList.getType());
+        bid.setBidQuantity(bidList.getBidQuantity());
+        return bidListRepository.save(bid);
+    }
+
+    public void deleteBidListById(Integer id) {
+        bidListRepository.deleteById(id);
     }
 }
