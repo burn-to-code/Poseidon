@@ -1,7 +1,8 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.BidList;
-import com.poseidon.domain.DTO.BidListResponse;
+import com.poseidon.domain.DTO.BidListResponseForList;
+import com.poseidon.domain.DTO.BidListResponseForUpdate;
 import com.poseidon.services.BidListService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class BidListController {
     @RequestMapping("/bidList/list")
     public String home(Model model)
     {
-        List<BidListResponse> bidList = bidListService.getBidListForResponseList();
-        model.addAttribute("bidList", bidList);
+        List<BidListResponseForList> bidList = bidListService.getBidListForResponseList();
+        model.addAttribute("bidLists", bidList);
         return "bidList/list";
     }
 
@@ -41,13 +42,13 @@ public class BidListController {
 
         bidListService.saveBidList(bid);
 
-        model.addAttribute("bidList", bidListService.getBidListForResponseList());
+        model.addAttribute("bidLists", bidListService.getBidListForResponseList());
         return "bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        BidListResponse bidList;
+        BidListResponseForUpdate bidList;
 
         try {
             bidList = bidListService.getBidListByIdForResponse(id);
@@ -61,19 +62,18 @@ public class BidListController {
     }
 
     @PostMapping("/bidList/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
+    public String updateBid(@PathVariable("id") Integer id, @Valid BidListResponseForUpdate bidListDto,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "bidList/update";
         }
 
         try {
-            bidListService.updateBidListById(id, bidList);
+            bidListService.updateBidListById(id, bidListDto);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "bidList/update";
         }
-        model.addAttribute("bidList", bidListService.getBidListForResponseList());
         return "redirect:/bidList/list";
     }
 

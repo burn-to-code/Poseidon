@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class BidListResponse {
+public class BidListResponseForList {
     private Integer id;
     private String account;
     private String type;

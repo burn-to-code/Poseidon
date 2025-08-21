@@ -1,7 +1,8 @@
 package com.poseidon.services;
 
 import com.poseidon.domain.BidList;
-import com.poseidon.domain.DTO.BidListResponse;
+import com.poseidon.domain.DTO.BidListResponseForList;
+import com.poseidon.domain.DTO.BidListResponseForUpdate;
 import com.poseidon.repositories.BidListRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,11 @@ public class BidListService {
     private final BidListRepository bidListRepository;
 
 
-    public List<BidListResponse> getBidListForResponseList() {
+    public List<BidListResponseForList> getBidListForResponseList() {
         List<BidList> bidList = bidListRepository.findAll();
 
         return bidList.stream()
-                .map(b -> new BidListResponse(b.getBidListId(), b.getAccount(), b.getType(), b.getBidQuantity())).toList();
+                .map(b -> new BidListResponseForList(b.getBidListId(), b.getAccount(), b.getType(), b.getBidQuantity())).toList();
     }
 
     public BidList saveBidList(BidList bidList) {
@@ -34,13 +35,13 @@ public class BidListService {
         return bidListRepository.save(bidList);
     }
 
-    public BidListResponse getBidListByIdForResponse(Integer id) {
+    public BidListResponseForUpdate getBidListByIdForResponse(Integer id) {
         BidList bidList = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
 
-        return new BidListResponse(bidList.getBidListId(), bidList.getAccount(), bidList.getType(), bidList.getBidQuantity());
+        return new BidListResponseForUpdate(bidList.getBidListId(), bidList.getAccount(), bidList.getType(), bidList.getBidQuantity());
     }
 
-    public BidList updateBidListById(Integer id, BidList bidList) {
+    public BidList updateBidListById(Integer id, BidListResponseForUpdate bidList) {
         BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
         bid.setAccount(bidList.getAccount());
         bid.setType(bidList.getType());
