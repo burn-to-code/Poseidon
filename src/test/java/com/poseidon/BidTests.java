@@ -16,31 +16,31 @@ import java.util.Optional;
 @SpringBootTest
 public class BidTests {
 
-	@Autowired
-	private BidListRepository bidListRepository;
+    @Autowired
+    private BidListRepository bidListRepository;
 
-	@Test
-	public void bidListTest() {
-		BidList bid = new BidList("Account Test", "Type Test", 10d);
+    @Test
+    public void bidListTest() {
+        BidList bid = new BidList("Account Test", "Type Test", 10d);
 
-		// Save
-		bid = bidListRepository.save(bid);
-		Assert.assertNotNull(bid.getBidListId());
-		Assert.assertEquals(10d, bid.getBidQuantity(), 10d);
+        // Save
+        bid = bidListRepository.save(bid);
+        Assert.assertNotNull(bid.getBidListId());
+        Assert.assertEquals(10d, bid.getBidQuantity(), 10d);
 
-		// Update
-		bid.setBidQuantity(20d);
-		bid = bidListRepository.save(bid);
-		Assert.assertEquals(20d, bid.getBidQuantity(), 20d);
+        // Update
+        bid.setBidQuantity(20d);
+        bid = bidListRepository.save(bid);
+        Assert.assertEquals(20d, bid.getBidQuantity(), 20d);
 
-		// Find
-		List<BidList> listResult = bidListRepository.findAll();
+        // Find
+        List<BidList> listResult = bidListRepository.findAll();
         Assert.assertFalse(listResult.isEmpty());
 
-		// Delete
-		Integer id = bid.getBidListId();
-		bidListRepository.delete(bid);
-		Optional<BidList> bidList = bidListRepository.findById(id);
-		Assert.assertFalse(bidList.isPresent());
-	}
+        // Delete
+        Integer id = bid.getBidListId();
+        bidListRepository.delete(bid);
+        Optional<BidList> bidList = bidListRepository.findById(id);
+        Assert.assertFalse(bidList.isPresent());
+    }
 }
