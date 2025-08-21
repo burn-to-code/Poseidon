@@ -3,7 +3,7 @@ package com.poseidon.controllers;
 import com.poseidon.domain.BidList;
 import com.poseidon.domain.DTO.BidListResponseForList;
 import com.poseidon.domain.DTO.BidListResponseForUpdate;
-import com.poseidon.services.BidListService;
+import com.poseidon.services.BidListServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BidListController {
 
-    private final BidListService bidListService;
+    private final BidListServiceImpl bidListService;
 
     @RequestMapping("/bidList/list")
     public String home(Model model)
