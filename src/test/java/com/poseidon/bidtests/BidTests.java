@@ -1,4 +1,4 @@
-package com.poseidon;
+package com.poseidon.bidtests;
 
 import com.poseidon.domain.BidList;
 import com.poseidon.repositories.BidListRepository;

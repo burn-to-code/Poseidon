@@ -1,4 +1,4 @@
-package com.poseidon;
+package com.poseidon.ratingtests;
 
 import com.poseidon.domain.Rating;
 import com.poseidon.repositories.RatingRepository;
