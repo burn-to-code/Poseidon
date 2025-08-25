@@ -92,7 +92,6 @@ public class BidListControllerTest {
     @Test
     public void testDeleteBid() throws Exception {
         doNothing().when(bidListService).deleteBidListById(1);
-        when(bidListService.getBidListForResponseList()).thenReturn(List.of());
 
         mockMvc.perform(get("/bidList/delete/1"))
                 .andExpect(status().is3xxRedirection())

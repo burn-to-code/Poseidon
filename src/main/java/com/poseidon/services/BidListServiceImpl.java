@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+
 @Service
 @AllArgsConstructor
 public class BidListServiceImpl implements BidListService {
@@ -54,6 +56,10 @@ public class BidListServiceImpl implements BidListService {
 
     @Override
     public void deleteBidListById(Integer id) {
-        bidListRepository.deleteById(id);
+        assertNotNull(id, "Id Must Not Be Null");
+
+        BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
+
+        bidListRepository.delete(bid);
     }
 }
