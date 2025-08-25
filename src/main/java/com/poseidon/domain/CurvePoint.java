@@ -1,6 +1,7 @@
 package com.poseidon.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class CurvePoint {
     private Integer id;
 
     @Column(name = "CurveId")
+    @NotNull(message = "must not be null")
     private int curveId;
 
     @Column(name = "asOfDate")
@@ -37,7 +39,7 @@ public class CurvePoint {
     private Date creationDate;
 
     public CurvePoint(int i, double v, double v1) {
-        this.id = i;
+        this.curveId = i;
         this.value = v;
         this.term = v1;
     }
