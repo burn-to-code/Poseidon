@@ -1,4 +1,4 @@
-package com.poseidon;
+package com.poseidon.rulenametests;
 
 import com.poseidon.domain.RuleName;
 import com.poseidon.repositories.RuleNameRepository;

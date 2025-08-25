@@ -1,4 +1,4 @@
-package com.poseidon.CurvePointTest;
+package com.poseidon.curvepointtests;
 
 import com.poseidon.controllers.CurveController;
 import com.poseidon.domain.CurvePoint;
