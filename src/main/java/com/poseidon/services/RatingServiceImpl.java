@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-
 @Service
 @AllArgsConstructor
 public class RatingServiceImpl implements RatingService{
@@ -22,26 +20,32 @@ public class RatingServiceImpl implements RatingService{
 
     @Override
     public Rating saveRating(Rating rating) {
+        if(rating == null) throw new IllegalArgumentException("Rating Must Not Be Null");
+
         return ratingRepository.save(rating);
     }
 
     @Override
     public Rating findById(Integer id) {
-        assertNotNull(id, "Id Must Not Be Null");
+        if(id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if(id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
+
         return ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Rating Id:" + id));
     }
 
     @Override
     public Rating updateRatingById(Integer id, Rating rating) {
-        assertNotNull(id, "Id Must Not Be Null:");
-        assertNotNull(rating, "Rating Must Not Be Null:");
+        if(id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if(id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
+        if(rating == null) throw new IllegalArgumentException(("Rating Must Not Be Null"));
 
         return ratingRepository.save(rating);
     }
 
     @Override
     public void deleteRatingById(Integer id) {
-        assertNotNull(id, "Id Must Not Be Null");
+        if (id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if (id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
 
         ratingRepository.deleteById(id);
     }

@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-
 @Service
 @AllArgsConstructor
 public class CurvePointServiceImpl implements CurvePointServices{
@@ -29,13 +27,16 @@ public class CurvePointServiceImpl implements CurvePointServices{
 
     @Override
     public CurvePoint saveCurvePoint(CurvePoint curvePoint) {
+        if(curvePoint == null) throw new IllegalArgumentException("CurvePoint Must Not Be Null");
         curvePoint.setCreationDate(new Date(System.currentTimeMillis()));
         return curvePointRepository.save(curvePoint);
     }
 
     @Override
     public CurvePointResponseForUpdate getUpdateCurvePointById(Integer id) {
-        assertNotNull(id, "Id Must Not Be Null:");
+        if (id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if (id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
+
         CurvePoint curvePoint = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid CurvePoint Id:" + id));
 
         return new CurvePointResponseForUpdate(curvePoint.getId(), curvePoint.getTerm(), curvePoint.getValue());
@@ -43,7 +44,10 @@ public class CurvePointServiceImpl implements CurvePointServices{
 
     @Override
     public CurvePoint updateCurvePointById(Integer id, CurvePoint curvePoint) {
-        assertNotNull(id, "Id Must Not Be Null:");
+        if (id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if (id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
+        if (curvePoint == null) throw new IllegalArgumentException("CurvePoint Must Not Be Null");
+
         CurvePoint curve = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid CurvePoint Id:" + id));
 
         curve.setTerm(curvePoint.getTerm());
@@ -54,7 +58,7 @@ public class CurvePointServiceImpl implements CurvePointServices{
 
     @Override
     public void deleteCurvePointById(Integer id) {
-        assertNotNull(id, "Id Must Not Be Null:");
+        if (id == null) throw new IllegalArgumentException("Id Must Not Be Null");
 
         CurvePoint cuverPoint = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid CurvePoint Id:" + id));
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+
 
 @Service
 @AllArgsConstructor
@@ -22,28 +22,31 @@ public class RuleNameServiceImpl implements RuleNameService {
 
     @Override
     public RuleName saveRuleName(RuleName ruleName) {
-        assertNotNull(ruleName, "RuleName cannot be null");
+        if(ruleName == null) throw new IllegalArgumentException("RuleName Must Not Be Null");
 
         return ruleNameRepository.save(ruleName);
     }
 
     @Override
     public RuleName findById(Integer id) {
-        assertNotNull(id, "Id Must Not Be Null");
+        if(id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if(id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
         return ruleNameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid RuleName Id:" + id));
     }
 
     @Override
     public RuleName updateRuleNameById(Integer id, RuleName ruleName) {
-        assertNotNull(id, "Id Must Not Be Null:");
-        assertNotNull(ruleName, "RuleName Must Not Be Null:");
+        if(id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if(id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
+        if(ruleName == null) throw new IllegalArgumentException("RuleName Must Not Be Null");
         return ruleNameRepository.save(ruleName);
     }
 
     @Override
     public void deleteRuleNameById(Integer id) {
-        assertNotNull(id, "Id Must Not Be Null");
+        if(id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if(id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
         ruleNameRepository.deleteById(id);
     }
 }

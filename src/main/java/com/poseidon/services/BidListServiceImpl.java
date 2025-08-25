@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-
 @Service
 @AllArgsConstructor
 public class BidListServiceImpl implements BidListService {
@@ -40,6 +38,9 @@ public class BidListServiceImpl implements BidListService {
 
     @Override
     public BidListResponseForUpdate getBidListByIdForResponse(Integer id) {
+        if (id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if (id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
+
         BidList bidList = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
 
         return new BidListResponseForUpdate(bidList.getBidListId(), bidList.getAccount(), bidList.getType(), bidList.getBidQuantity());
@@ -47,16 +48,23 @@ public class BidListServiceImpl implements BidListService {
 
     @Override
     public BidList updateBidListById(Integer id, BidListResponseForUpdate bidList) {
+
+        if (id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if (id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
+        if (bidList == null) throw new IllegalArgumentException("BidList Must Not Be Null");
+
         BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
         bid.setAccount(bidList.getAccount());
         bid.setType(bidList.getType());
         bid.setBidQuantity(bidList.getBidQuantity());
+
         return bidListRepository.save(bid);
     }
 
     @Override
     public void deleteBidListById(Integer id) {
-        assertNotNull(id, "Id Must Not Be Null");
+        if (id == null) throw new IllegalArgumentException("Id Must Not Be Null");
+        if (id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
 
         BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
 
