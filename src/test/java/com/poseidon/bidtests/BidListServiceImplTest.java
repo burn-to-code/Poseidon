@@ -13,8 +13,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class BidListServiceImplTest {
@@ -88,9 +87,100 @@ class BidListServiceImplTest {
 
     @Test
     void testDeleteBidList() {
+        BidList bid = new BidList("Account", "Type", 10d);
+        bid.setBidListId(1);
+        when(bidListRepository.findById(1)).thenReturn(Optional.of(bid));
+
         bidListService.deleteBidListById(1);
-        verify(bidListRepository, times(1)).deleteById(1);
+
+        verify(bidListRepository, times(1)).findById(1);
+        verify(bidListRepository, times(1)).delete(bid);
     }
 
+    @Test
+    void testGetBidListByIdForResponse_NullId() {
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.getBidListByIdForResponse(null)
+        );
+        assertEquals("Id Must Not Be Null", ex.getMessage());
+    }
+
+    @Test
+    void testGetBidListByIdForResponse_NegativeId() {
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.getBidListByIdForResponse(-1)
+        );
+        assertEquals("Id Must Be Greater Than Zero", ex.getMessage());
+    }
+
+    @Test
+    void testGetBidListByIdForResponse_InvalidId() {
+        when(bidListRepository.findById(999)).thenReturn(Optional.empty());
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.getBidListByIdForResponse(999)
+        );
+        assertEquals("Invalid bidList Id:999", ex.getMessage());
+    }
+
+    @Test
+    void testUpdateBidListById_NullId() {
+        BidListResponseForUpdate update = new BidListResponseForUpdate(1, "A", "B", 10d);
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.updateBidListById(null, update)
+        );
+        assertEquals("Id Must Not Be Null", ex.getMessage());
+    }
+
+    @Test
+    void testUpdateBidListById_NegativeId() {
+        BidListResponseForUpdate update = new BidListResponseForUpdate(1, "A", "B", 10d);
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.updateBidListById(-1, update)
+        );
+        assertEquals("Id Must Be Greater Than Zero", ex.getMessage());
+    }
+
+    @Test
+    void testUpdateBidListById_NullBidList() {
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.updateBidListById(1, null)
+        );
+        assertEquals("BidList Must Not Be Null", ex.getMessage());
+    }
+
+    @Test
+    void testUpdateBidListById_InvalidId() {
+        BidListResponseForUpdate update = new BidListResponseForUpdate(1, "A", "B", 10d);
+        when(bidListRepository.findById(999)).thenReturn(Optional.empty());
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.updateBidListById(999, update)
+        );
+        assertEquals("Invalid bidList Id:999", ex.getMessage());
+    }
+
+    @Test
+    void testDeleteBidListById_NullId() {
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.deleteBidListById(null)
+        );
+        assertEquals("Id Must Not Be Null", ex.getMessage());
+    }
+
+    @Test
+    void testDeleteBidListById_NegativeId() {
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.deleteBidListById(-1)
+        );
+        assertEquals("Id Must Be Greater Than Zero", ex.getMessage());
+    }
+
+    @Test
+    void testDeleteBidListById_InvalidId() {
+        when(bidListRepository.findById(999)).thenReturn(Optional.empty());
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                bidListService.deleteBidListById(999)
+        );
+        assertEquals("Invalid bidList Id:999", ex.getMessage());
+    }
 
 }

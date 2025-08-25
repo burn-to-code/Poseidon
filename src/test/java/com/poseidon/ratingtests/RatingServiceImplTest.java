@@ -93,4 +93,51 @@ class RatingServiceImplTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> ratingService.deleteRatingById(null));
         assertTrue(exception.getMessage().contains("Id Must Not Be Null"));
     }
+
+    @Test
+    void testSaveRating_NullRating_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ratingService.saveRating(null));
+
+        assertEquals("Rating Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    void testFindById_NullId_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ratingService.findById(null));
+
+        assertEquals("Id Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    void testFindById_NegativeId_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ratingService.findById(-1));
+        assertEquals("Id Must Be Greater Than Zero", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateRatingById_NullId_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ratingService.updateRatingById(null, rating1));
+        assertEquals("Id Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateRatingById_NegativeId_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ratingService.updateRatingById(-1, rating1));
+
+        assertEquals("Id Must Be Greater Than Zero", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateRatingById_NullRating_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ratingService.updateRatingById(1, null));
+        assertEquals("Rating Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteRatingById_NegativeId_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ratingService.deleteRatingById(-1));
+
+        assertEquals("Id Must Be Greater Than Zero", exception.getMessage());
+    }
+
 }

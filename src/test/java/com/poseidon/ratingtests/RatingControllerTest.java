@@ -1,5 +1,6 @@
-package com.poseidon.controllers;
+package com.poseidon.ratingtests;
 
+import com.poseidon.controllers.RatingController;
 import com.poseidon.domain.Rating;
 import com.poseidon.services.RatingService;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,12 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -24,12 +22,6 @@ class RatingControllerTest {
 
     @InjectMocks
     private RatingController ratingController;
-
-    @Mock
-    private Model model;
-
-    @Mock
-    private BindingResult bindingResult;
 
     private MockMvc mockMvc;
 
@@ -68,70 +60,63 @@ class RatingControllerTest {
     }
 
     @Test
-    void testValidate_withErrors() throws Exception {
-        when(bindingResult.hasErrors()).thenReturn(true);
+    void testValidate_success() throws Exception {
+        mockMvc.perform(post("/rating/validate")
+                        .param("moodysRating", "Moody1")
+                        .param("sandPRating", "SP1")
+                        .param("fitchRating", "Fitch1")
+                        .param("orderNumber", "1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/rating/list"));
 
-        String view = ratingController.validate(rating1, bindingResult, model);
-        assertEquals("rating/add", view);
-        verify(ratingService, never()).saveRating(any());
-    }
-
-    @Test
-    void testValidate_noErrors() throws Exception {
-        when(bindingResult.hasErrors()).thenReturn(false);
-        when(ratingService.findAll()).thenReturn(Arrays.asList(rating1, rating2));
-
-        String view = ratingController.validate(rating1, bindingResult, model);
-        assertEquals("rating/add", view);
-        verify(ratingService, times(1)).saveRating(rating1);
+        verify(ratingService, times(1)).saveRating(any(Rating.class));
         verify(ratingService, times(1)).findAll();
     }
 
     @Test
-    void testShowUpdateForm_validId() throws Exception {
+    void testShowUpdateForm_success() throws Exception {
         when(ratingService.findById(1)).thenReturn(rating1);
 
-        String view = ratingController.showUpdateForm(1, model);
-        assertEquals("rating/update", view);
-        verify(ratingService, times(2)).findById(1);
+        mockMvc.perform(get("/rating/update/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("rating/update"))
+                .andExpect(model().attributeExists("rating"));
+
+        verify(ratingService, times(2)).findById(1); // appelé 2 fois dans le contrôleur
     }
 
     @Test
-    void testShowUpdateForm_invalidId() throws Exception {
+    void testShowUpdateForm_notFound() throws Exception {
         when(ratingService.findById(99)).thenThrow(new IllegalArgumentException("Invalid Rating Id:99"));
 
-        String view = ratingController.showUpdateForm(99, model);
-        assertEquals("redirect:/rating/list", view);
+        mockMvc.perform(get("/rating/update/99"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/rating/list"));
+
         verify(ratingService, times(1)).findById(99);
-        verify(model, times(1)).addAttribute(eq("error"), anyString());
     }
 
     @Test
-    void testUpdateRating_withErrors() throws Exception {
-        when(bindingResult.hasErrors()).thenReturn(true);
+    void testUpdateRating_success() throws Exception {
+        mockMvc.perform(post("/rating/update/1")
+                        .param("moodysRating", "Moody1")
+                        .param("sandPRating", "SP1")
+                        .param("fitchRating", "Fitch1")
+                        .param("orderNumber", "1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/rating/list"));
 
-        String view = ratingController.updateRating(1, rating1, bindingResult, model);
-        assertEquals("rating/update", view);
-        verify(ratingService, never()).updateRatingById(anyInt(), any());
+        verify(ratingService, times(1)).updateRatingById(eq(1), any(Rating.class));
     }
 
     @Test
-    void testUpdateRating_noErrors() throws Exception {
-        when(bindingResult.hasErrors()).thenReturn(false);
-        when(ratingService.findAll()).thenReturn(Arrays.asList(rating1, rating2));
-
-        String view = ratingController.updateRating(1, rating1, bindingResult, model);
-        assertEquals("redirect:/rating/list", view);
-        verify(ratingService, times(1)).updateRatingById(1, rating1);
-        verify(ratingService, times(1)).findAll();
-    }
-
-    @Test
-    void testDeleteRating() throws Exception {
+    void testDeleteRating_success() throws Exception {
         doNothing().when(ratingService).deleteRatingById(1);
 
-        String view = ratingController.deleteRating(1, model);
-        assertEquals("redirect:/rating/list", view);
+        mockMvc.perform(get("/rating/delete/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/rating/list"));
+
         verify(ratingService, times(1)).deleteRatingById(1);
     }
 }

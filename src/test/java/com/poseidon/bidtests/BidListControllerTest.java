@@ -69,9 +69,8 @@ public class BidListControllerTest {
                         .param("account", "Acc")
                         .param("type", "Type")
                         .param("bidQuantity", "10"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("bidList/list"))
-                .andExpect(model().attributeExists("bidLists"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bidList/list"));
 
         verify(bidListService, times(1)).saveBidList(any(BidList.class));
     }

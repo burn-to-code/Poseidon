@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -100,4 +101,75 @@ public class CurvePointServiceImplTest {
         verify(curvePointRepository, times(1)).findById(1);
         verify(curvePointRepository, times(1)).delete(curvePoint);
     }
+
+    @Test
+    public void testSaveCurvePoint_NullCurvePoint_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.saveCurvePoint(null));
+
+        assertEquals("CurvePoint Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    public void testGetUpdateCurvePointById_NullId_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.getUpdateCurvePointById(null));
+        assertEquals("Id Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    public void testGetUpdateCurvePointById_NegativeId_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.getUpdateCurvePointById(-1));
+        assertEquals("Id Must Be Greater Than Zero", exception.getMessage());
+    }
+
+    @Test
+    public void testGetUpdateCurvePointById_NotFound_ThrowsException() {
+        when(curvePointRepository.findById(999)).thenReturn(Optional.empty());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.getUpdateCurvePointById(999));
+        assertEquals("Invalid CurvePoint Id:999", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCurvePointById_NullId_ThrowsException() {
+        CurvePoint cp = new CurvePoint(1, 10.0, 5.0);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.updateCurvePointById(null, cp));
+        assertEquals("Id Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCurvePointById_NegativeId_ThrowsException() {
+        CurvePoint cp = new CurvePoint(1, 10.0, 5.0);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.updateCurvePointById(-1, cp));
+        assertEquals("Id Must Be Greater Than Zero", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCurvePointById_NullCurvePoint_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.updateCurvePointById(1, null));
+        assertEquals("CurvePoint Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCurvePointById_NotFound_ThrowsException() {
+        CurvePoint cp = new CurvePoint(1, 10.0, 5.0);
+        when(curvePointRepository.findById(999)).thenReturn(Optional.empty());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.updateCurvePointById(999, cp));
+        assertEquals("Invalid CurvePoint Id:999", exception.getMessage());
+    }
+
+    @Test
+    public void testDeleteCurvePointById_NullId_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.deleteCurvePointById(null));
+        assertEquals("Id Must Not Be Null", exception.getMessage());
+    }
+
+    @Test
+    public void testDeleteCurvePointById_NotFound_ThrowsException() {
+        when(curvePointRepository.findById(999)).thenReturn(Optional.empty());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> curvePointService.deleteCurvePointById(999));
+        assertEquals("Invalid CurvePoint Id:999", exception.getMessage());
+    }
+
 }

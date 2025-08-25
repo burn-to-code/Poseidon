@@ -63,8 +63,8 @@ public class CurvePointControllerTest {
         mockMvc.perform(post("/curvePoint/validate")
                         .param("term", "15.23")
                         .param("value", "11.33"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("curvePoint/list"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/curvePoint/list"));
 
         verify(curvePointService, times(1)).saveCurvePoint(any(CurvePoint.class));
     }
