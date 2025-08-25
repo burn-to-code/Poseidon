@@ -42,7 +42,7 @@ public class RatingController {
         ratingService.saveRating(rating);
 
         model.addAttribute("ratings", ratingService.findAll());
-        return "rating/add";
+        return "redirect:/rating/list";
     }
 
     @GetMapping("/rating/update/{id}")
@@ -71,7 +71,6 @@ public class RatingController {
             model.addAttribute("error", e.getMessage());
         }
 
-        model.addAttribute("ratings", ratingService.findAll());
         return "redirect:/rating/list";
     }
 

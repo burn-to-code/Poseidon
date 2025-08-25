@@ -43,7 +43,7 @@ public class BidListController {
         bidListService.saveBidList(bid);
 
         model.addAttribute("bidLists", bidListService.getBidListForResponseList());
-        return "bidList/list";
+        return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
