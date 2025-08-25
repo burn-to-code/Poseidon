@@ -39,7 +39,13 @@ public class RatingServiceImpl implements RatingService{
         if(id < 0) throw new IllegalArgumentException("Id Must Be Greater Than Zero");
         if(rating == null) throw new IllegalArgumentException(("Rating Must Not Be Null"));
 
-        return ratingRepository.save(rating);
+        Rating ratingUpdated = ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Rating Id:" + id));
+
+        ratingUpdated.setMoodysRating(rating.getMoodysRating());
+        ratingUpdated.setSandPRating(rating.getSandPRating());
+        ratingUpdated.setFitchRating(rating.getFitchRating());
+        ratingUpdated.setOrderNumber(rating.getOrderNumber());
+        return ratingRepository.save(ratingUpdated);
     }
 
     @Override
