@@ -1,4 +1,4 @@
-package com.poseidon;
+package com.poseidon.tradetests;
 
 import com.poseidon.domain.Trade;
 import com.poseidon.repositories.TradeRepository;

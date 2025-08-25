@@ -42,7 +42,6 @@ public class TradeController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-        // TODO: check data valid and save to db, after saving return Trade list
         return "redirect:/trade/list";
     }
 
