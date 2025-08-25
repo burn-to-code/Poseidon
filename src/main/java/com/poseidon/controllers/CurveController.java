@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 public class CurveController {
 
-    CurvePointServices curvePointServices;
+    private final CurvePointServices curvePointServices;
 
     @RequestMapping("/curvePoint/list")
     public String home(Model model)

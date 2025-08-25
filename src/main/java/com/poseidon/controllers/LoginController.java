@@ -1,7 +1,7 @@
 package com.poseidon.controllers;
 
 import com.poseidon.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,10 +9,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("app")
+@AllArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     @GetMapping("login")
     public ModelAndView login() {
