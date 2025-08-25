@@ -36,7 +36,7 @@ public class RatingServiceImpl implements RatingService{
         assertNotNull(id, "Id Must Not Be Null:");
         assertNotNull(rating, "Rating Must Not Be Null:");
 
-        return ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Rating Id:" + id));
+        return ratingRepository.save(rating);
     }
 
     @Override

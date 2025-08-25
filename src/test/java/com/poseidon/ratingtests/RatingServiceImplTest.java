@@ -1,7 +1,8 @@
-package com.poseidon.services;
+package com.poseidon.ratingtests;
 
 import com.poseidon.domain.Rating;
 import com.poseidon.repositories.RatingRepository;
+import com.poseidon.services.RatingServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -71,12 +72,12 @@ class RatingServiceImplTest {
 
     @Test
     void testUpdateRatingById_validId() {
-        when(ratingRepository.findById(1)).thenReturn(Optional.of(rating1));
+        when(ratingRepository.save(rating1)).thenReturn(rating1);
 
         Rating updated = ratingService.updateRatingById(1, rating1);
         assertNotNull(updated);
         assertEquals(rating1.getId(), updated.getId());
-        verify(ratingRepository, times(1)).findById(1);
+        verify(ratingRepository, times(1)).save(rating1);
     }
 
     @Test
