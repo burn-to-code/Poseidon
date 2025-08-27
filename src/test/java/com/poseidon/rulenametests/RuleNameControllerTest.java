@@ -2,7 +2,7 @@ package com.poseidon.rulenametests;
 
 import com.poseidon.controllers.RuleNameController;
 import com.poseidon.domain.RuleName;
-import com.poseidon.services.RuleNameService;
+import com.poseidon.services.RuleNameCrudService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ class RuleNameControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private RuleNameService ruleNameService;
+    private RuleNameCrudService ruleNameService;
 
     @InjectMocks
     private RuleNameController ruleNameController;
@@ -36,14 +36,14 @@ class RuleNameControllerTest {
 
     @Test
     void home_shouldReturnListViewWithRuleNames() throws Exception {
-        when(ruleNameService.findAll()).thenReturn(List.of(new RuleName()));
+        when(ruleNameService.getAll()).thenReturn(List.of(new RuleName()));
 
         mockMvc.perform(get("/ruleName/list"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("ruleName/list"))
                 .andExpect(model().attributeExists("ruleNames"));
 
-        verify(ruleNameService, times(1)).findAll();
+        verify(ruleNameService, times(1)).getAll();
     }
 
     @Test
@@ -55,14 +55,14 @@ class RuleNameControllerTest {
 
     @Test
     void validate_withValidRuleName_shouldRedirectToList() throws Exception {
-        when(ruleNameService.findAll()).thenReturn(List.of(new RuleName()));
+        when(ruleNameService.getAll()).thenReturn(List.of(new RuleName()));
 
         mockMvc.perform(post("/ruleName/validate")
                         .param("name", "Rule1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/ruleName/list"));
 
-        verify(ruleNameService, times(1)).saveRuleName(any(RuleName.class));
+        verify(ruleNameService, times(1)).save(any(RuleName.class));
     }
 
     @Test
@@ -74,14 +74,14 @@ class RuleNameControllerTest {
 
     @Test
     void showUpdateForm_withValidId_shouldReturnUpdateView() throws Exception {
-        when(ruleNameService.findById(1)).thenReturn(new RuleName());
+        when(ruleNameService.getById(1)).thenReturn(new RuleName());
 
         mockMvc.perform(get("/ruleName/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("ruleName/update"))
                 .andExpect(model().attributeExists("ruleName"));
 
-        verify(ruleNameService, times(1)).findById(1);
+        verify(ruleNameService, times(1)).getById(1);
     }
 
     @Test
@@ -91,7 +91,7 @@ class RuleNameControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/ruleName/list"));
 
-        verify(ruleNameService, times(1)).updateRuleNameById(eq(1), any(RuleName.class));
+        verify(ruleNameService, times(1)).update(eq(1), any(RuleName.class));
     }
 
     @Test
@@ -107,6 +107,6 @@ class RuleNameControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/ruleName/list"));
 
-        verify(ruleNameService, times(1)).deleteRuleNameById(1);
+        verify(ruleNameService, times(1)).deleteById(1);
     }
 }

@@ -2,7 +2,7 @@ package com.poseidon.ratingtests;
 
 import com.poseidon.controllers.RatingController;
 import com.poseidon.domain.Rating;
-import com.poseidon.services.RatingService;
+import com.poseidon.services.RatingCrudService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RatingControllerTest {
 
     @Mock
-    private RatingService ratingService;
+    private RatingCrudService ratingService;
 
     @InjectMocks
     private RatingController ratingController;
@@ -42,14 +42,14 @@ class RatingControllerTest {
 
     @Test
     void testHome() throws Exception {
-        when(ratingService.findAll()).thenReturn(Arrays.asList(rating1, rating2));
+        when(ratingService.getAll()).thenReturn(Arrays.asList(rating1, rating2));
 
         mockMvc.perform(get("/rating/list"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("rating/list"))
                 .andExpect(model().attributeExists("ratings"));
 
-        verify(ratingService, times(1)).findAll();
+        verify(ratingService, times(1)).getAll();
     }
 
     @Test
@@ -69,31 +69,31 @@ class RatingControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/rating/list"));
 
-        verify(ratingService, times(1)).saveRating(any(Rating.class));
-        verify(ratingService, times(1)).findAll();
+        verify(ratingService, times(1)).save(any(Rating.class));
+        verify(ratingService, times(1)).getAll();
     }
 
     @Test
     void testShowUpdateForm_success() throws Exception {
-        when(ratingService.findById(1)).thenReturn(rating1);
+        when(ratingService.getById(1)).thenReturn(rating1);
 
         mockMvc.perform(get("/rating/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("rating/update"))
                 .andExpect(model().attributeExists("rating"));
 
-        verify(ratingService, times(2)).findById(1); // appelé 2 fois dans le contrôleur
+        verify(ratingService, times(1)).getById(1); // appelé 2 fois dans le contrôleur
     }
 
     @Test
     void testShowUpdateForm_notFound() throws Exception {
-        when(ratingService.findById(99)).thenThrow(new IllegalArgumentException("Invalid Rating Id:99"));
+        when(ratingService.getById(99)).thenThrow(new IllegalArgumentException("Invalid Rating Id:99"));
 
         mockMvc.perform(get("/rating/update/99"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/rating/list"));
 
-        verify(ratingService, times(1)).findById(99);
+        verify(ratingService, times(1)).getById(99);
     }
 
     @Test
@@ -106,17 +106,17 @@ class RatingControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/rating/list"));
 
-        verify(ratingService, times(1)).updateRatingById(eq(1), any(Rating.class));
+        verify(ratingService, times(1)).update(eq(1), any(Rating.class));
     }
 
     @Test
     void testDeleteRating_success() throws Exception {
-        doNothing().when(ratingService).deleteRatingById(1);
+        doNothing().when(ratingService).deleteById(1);
 
         mockMvc.perform(get("/rating/delete/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/rating/list"));
 
-        verify(ratingService, times(1)).deleteRatingById(1);
+        verify(ratingService, times(1)).deleteById(1);
     }
 }

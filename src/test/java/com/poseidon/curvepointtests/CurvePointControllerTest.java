@@ -4,7 +4,7 @@ import com.poseidon.controllers.CurveController;
 import com.poseidon.domain.CurvePoint;
 import com.poseidon.domain.DTO.CurvePointResponseForList;
 import com.poseidon.domain.DTO.CurvePointResponseForUpdate;
-import com.poseidon.services.CurvePointServiceImpl;
+import com.poseidon.services.CurvePointCrudService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ public class CurvePointControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private CurvePointServiceImpl curvePointService;
+    private CurvePointCrudService curvePointService;
 
     @InjectMocks
     private CurveController curve;
@@ -39,7 +39,7 @@ public class CurvePointControllerTest {
     @Test
     public void testGetCurvePoints() throws Exception {
         CurvePointResponseForList expectedPoint = new CurvePointResponseForList(1, 10, 15.23, 11.33);
-        when(curvePointService.findAllForResponseList()).thenReturn(List.of(expectedPoint));
+        when(curvePointService.getAllForList()).thenReturn(List.of(expectedPoint));
 
         mockMvc.perform(get("/curvePoint/list"))
                 .andExpect(status().isOk())
@@ -47,7 +47,7 @@ public class CurvePointControllerTest {
                 .andExpect(model().attributeExists("curvePoints"))
                 .andReturn();
 
-        verify(curvePointService, times(1)).findAllForResponseList();
+        verify(curvePointService, times(1)).getAllForList();
     }
 
     @Test
@@ -66,7 +66,7 @@ public class CurvePointControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/curvePoint/list"));
 
-        verify(curvePointService, times(1)).saveCurvePoint(any(CurvePoint.class));
+        verify(curvePointService, times(1)).save(any(CurvePoint.class));
     }
 
     @Test
@@ -74,22 +74,20 @@ public class CurvePointControllerTest {
         CurvePoint curvePoint = new CurvePoint(10, 15.23, 11.33);
         curvePoint.setId(1);
 
-        when(curvePointService.getUpdateCurvePointById(1)).thenReturn(new CurvePointResponseForUpdate(curvePoint.getCurveId(), curvePoint.getValue(), curvePoint.getTerm()));
+        when(curvePointService.toDTOForUpdate(1)).thenReturn(new CurvePointResponseForUpdate(curvePoint.getCurveId(), curvePoint.getValue(), curvePoint.getTerm()));
 
         mockMvc.perform(get("/curvePoint/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("curvePoint/update"))
                 .andExpect(model().attributeExists("curvePoint"));
 
-        verify(curvePointService, times(1)).getUpdateCurvePointById(1);
+        verify(curvePointService, times(1)).toDTOForUpdate(1);
     }
 
     @Test
     public void testPostUpdateCurvePoint() throws Exception {
         CurvePoint curvePoint = new CurvePoint(10, 15.23, 11.33);
         curvePoint.setId(1);
-
-        when(curvePointService.updateCurvePointById(curvePoint.getId(), curvePoint)).thenReturn(curvePoint);
 
         mockMvc.perform(post("/curvePoint/update/1")
                         .param("id", Objects.toString(curvePoint.getId()))
@@ -100,18 +98,18 @@ public class CurvePointControllerTest {
                 .andExpect(redirectedUrl("/curvePoint/list"));
 
         verify(curvePointService, times(1))
-                .updateCurvePointById(eq(curvePoint.getId()), any(CurvePoint.class));
+                .update(eq(curvePoint.getId()), any(CurvePoint.class));
     }
 
     @Test
     public void testDeleteCurvePoint() throws Exception {
-        doNothing().when(curvePointService).deleteCurvePointById(1);
+        doNothing().when(curvePointService).deleteById(1);
 
         mockMvc.perform(get("/curvePoint/delete/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/curvePoint/list"));
 
-        verify(curvePointService, times(1)).deleteCurvePointById(1);
+        verify(curvePointService, times(1)).deleteById(1);
     }
 
 
