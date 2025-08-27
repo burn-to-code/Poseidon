@@ -1,11 +1,12 @@
-package com.poseidon.services;
+package com.poseidon.services.abstracts;
 
 import com.poseidon.domain.BaseEntity;
+import com.poseidon.services.interfaces.DTOInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public abstract class AbstractCrudDtoService<ENTITY extends BaseEntity<ENTITY>, LIST_DTO, UPDATE_DTO> extends AbstractCrudService<ENTITY> implements DTOInterface<LIST_DTO, UPDATE_DTO>{
+public abstract class AbstractCrudDtoService<ENTITY extends BaseEntity<ENTITY>, LIST_DTO, UPDATE_DTO> extends AbstractCrudService<ENTITY> implements DTOInterface<LIST_DTO, UPDATE_DTO> {
 
     protected AbstractCrudDtoService(JpaRepository<ENTITY, Integer> repository) {
         super(repository);

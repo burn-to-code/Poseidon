@@ -1,7 +1,8 @@
-package com.poseidon.services;
+package com.poseidon.services.abstracts;
 
 
 import com.poseidon.domain.BaseEntity;
+import com.poseidon.services.interfaces.CrudInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.Assert;
 

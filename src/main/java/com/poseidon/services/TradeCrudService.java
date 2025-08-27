@@ -4,6 +4,7 @@ import com.poseidon.domain.DTO.TradeResponseForList;
 import com.poseidon.domain.DTO.TradeResponseForUpdate;
 import com.poseidon.domain.Trade;
 import com.poseidon.repositories.TradeRepository;
+import com.poseidon.services.abstracts.AbstractCrudDtoService;
 import org.springframework.stereotype.Service;
 
 @Service

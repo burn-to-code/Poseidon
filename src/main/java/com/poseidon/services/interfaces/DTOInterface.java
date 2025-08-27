@@ -1,4 +1,4 @@
-package com.poseidon.services;
+package com.poseidon.services.interfaces;
 
 import java.util.List;
 

@@ -4,6 +4,7 @@ import com.poseidon.domain.CurvePoint;
 import com.poseidon.domain.DTO.CurvePointResponseForList;
 import com.poseidon.domain.DTO.CurvePointResponseForUpdate;
 import com.poseidon.repositories.CurvePointRepository;
+import com.poseidon.services.abstracts.AbstractCrudDtoService;
 import org.springframework.stereotype.Service;
 
 @Service
