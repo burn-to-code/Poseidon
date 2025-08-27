@@ -2,9 +2,7 @@ package com.poseidon.bidtests;
 
 import com.poseidon.controllers.BidListController;
 import com.poseidon.domain.BidList;
-import com.poseidon.domain.DTO.BidListResponseForList;
-import com.poseidon.domain.DTO.BidListResponseForUpdate;
-import com.poseidon.services.BidListCrudService;
+import com.poseidon.services.interfaces.CrudInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,17 +14,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class BidListControllerTest {
 
     private MockMvc mockMvc;
 
     @Mock
-    private BidListCrudService bidListService;
+    private CrudInterface<BidList> crudService;
 
     @InjectMocks
     private BidListController bidListController;
@@ -39,15 +35,17 @@ public class BidListControllerTest {
 
     @Test
     public void testHome() throws Exception {
-        when(bidListService.getAllForList())
-                .thenReturn(List.of(new BidListResponseForList(1, "Acc", "Type", 10d)));
+        BidList bid = new BidList("Acc", "Type", 10d);
+        bid.setBidListId(1);
+
+        when(crudService.getAll()).thenReturn(List.of(bid));
 
         mockMvc.perform(get("/bidList/list"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("bidList/list"))
                 .andExpect(model().attributeExists("bidLists"));
 
-        verify(bidListService, times(1)).getAllForList();
+        verify(crudService, times(1)).getAll();
     }
 
     @Test
@@ -62,8 +60,8 @@ public class BidListControllerTest {
     public void testValidate() throws Exception {
         BidList bid = new BidList("Acc", "Type", 10d);
 
-        when(bidListService.save(any(BidList.class))).thenReturn(bid);
-        when(bidListService.getAllForList()).thenReturn(List.of());
+        when(crudService.save(any(BidList.class))).thenReturn(bid);
+        when(crudService.getAll()).thenReturn(List.of(bid));
 
         mockMvc.perform(post("/bidList/validate")
                         .param("account", "Acc")
@@ -72,30 +70,32 @@ public class BidListControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/bidList/list"));
 
-        verify(bidListService, times(1)).save(any(BidList.class));
+        verify(crudService, times(1)).save(any(BidList.class));
     }
 
     @Test
     public void testShowUpdateForm() throws Exception {
-        BidListResponseForUpdate dto = new BidListResponseForUpdate(1, "Acc", "Type", 10d);
-        when(bidListService.toDTOForUpdate(1)).thenReturn(dto);
+        BidList bid = new BidList("Acc", "Type", 10d);
+        bid.setBidListId(1);
+
+        when(crudService.getById(1)).thenReturn(bid);
 
         mockMvc.perform(get("/bidList/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("bidList/update"))
                 .andExpect(model().attributeExists("bidList"));
 
-        verify(bidListService, times(1)).toDTOForUpdate(1);
+        verify(crudService, times(1)).getById(1);
     }
 
     @Test
     public void testDeleteBid() throws Exception {
-        doNothing().when(bidListService).deleteById(1);
+        doNothing().when(crudService).deleteById(1);
 
         mockMvc.perform(get("/bidList/delete/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/bidList/list"));
 
-        verify(bidListService, times(1)).deleteById(1);
+        verify(crudService, times(1)).deleteById(1);
     }
 }

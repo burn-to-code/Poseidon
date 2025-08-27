@@ -1,26 +1,15 @@
 package com.poseidon.services;
 
 import com.poseidon.domain.CurvePoint;
-import com.poseidon.domain.DTO.CurvePointResponseForList;
-import com.poseidon.domain.DTO.CurvePointResponseForUpdate;
 import com.poseidon.repositories.CurvePointRepository;
-import com.poseidon.services.abstracts.AbstractCrudDtoService;
+import com.poseidon.services.abstracts.AbstractCrudService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CurvePointCrudService extends AbstractCrudDtoService<CurvePoint, CurvePointResponseForList, CurvePointResponseForUpdate> {
+public class CurvePointCrudService extends AbstractCrudService<CurvePoint> {
 
-    protected CurvePointCrudService(CurvePointRepository repository) {
+    public CurvePointCrudService(CurvePointRepository repository) {
         super(repository);
     }
 
-    @Override
-    protected CurvePointResponseForList toListDto(CurvePoint entity) {
-        return new CurvePointResponseForList(entity.getId(), entity.getCurveId(), entity.getTerm(), entity.getValue());
-    }
-
-    @Override
-    protected CurvePointResponseForUpdate toUpdateDto(CurvePoint entity) {
-        return new CurvePointResponseForUpdate(entity.getId(), entity.getTerm(), entity.getValue());
-    }
 }

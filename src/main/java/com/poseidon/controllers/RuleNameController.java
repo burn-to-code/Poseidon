@@ -1,7 +1,7 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.RuleName;
-import com.poseidon.services.RuleNameCrudService;
+import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class RuleNameController {
 
-    private final RuleNameCrudService service;
+    private final CrudInterface<RuleName> service;
 
     @RequestMapping("/ruleName/list")
     public String home(Model model)

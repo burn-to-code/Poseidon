@@ -1,7 +1,10 @@
 package com.poseidon.controllers;
 
+import com.poseidon.domain.DTO.GenericMapper;
+import com.poseidon.domain.DTO.TradeResponseForList;
+import com.poseidon.domain.DTO.TradeResponseForUpdate;
 import com.poseidon.domain.Trade;
-import com.poseidon.services.TradeCrudService;
+import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class TradeController {
 
-    private final TradeCrudService service;
+    private final CrudInterface<Trade> service;
 
     @RequestMapping("/trade/list")
     public String home(Model model)
     {
-        model.addAttribute("trades", service.getAllForList());
+        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new TradeResponseForList()));
         return "trade/list";
     }
 
@@ -48,7 +51,7 @@ public class TradeController {
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         try {
-            model.addAttribute("trade", service.toDTOForUpdate(id));
+            model.addAttribute("trade", GenericMapper.mapOne(service.getById(id), new TradeResponseForUpdate()));
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "redirect:/trade/list";

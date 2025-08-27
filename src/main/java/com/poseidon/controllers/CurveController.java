@@ -1,8 +1,10 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.CurvePoint;
+import com.poseidon.domain.DTO.CurvePointResponseForList;
 import com.poseidon.domain.DTO.CurvePointResponseForUpdate;
-import com.poseidon.services.CurvePointCrudService;
+import com.poseidon.domain.DTO.GenericMapper;
+import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class CurveController {
 
-    private final CurvePointCrudService service;
+    private final CrudInterface<CurvePoint> service;
 
     @RequestMapping("/curvePoint/list")
     public String home(Model model)
     {
         try {
-            model.addAttribute("curvePoints", service.getAllForList());
+            model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -44,7 +46,7 @@ public class CurveController {
 
         try {
             service.save(curvePoint);
-            model.addAttribute("curvePoints", service.getAllForList());
+            model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -56,7 +58,7 @@ public class CurveController {
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
         try {
-            CurvePointResponseForUpdate response = service.toDTOForUpdate(id);
+            CurvePointResponseForUpdate response = GenericMapper.mapOne(service.getById(id), new CurvePointResponseForUpdate());
             model.addAttribute("curvePoint", response);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

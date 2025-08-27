@@ -3,7 +3,8 @@ package com.poseidon.controllers;
 import com.poseidon.domain.BidList;
 import com.poseidon.domain.DTO.BidListResponseForList;
 import com.poseidon.domain.DTO.BidListResponseForUpdate;
-import com.poseidon.services.BidListCrudService;
+import com.poseidon.domain.DTO.GenericMapper;
+import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BidListController {
 
-    private final BidListCrudService service;
+    private final CrudInterface<BidList> service;
 
     @RequestMapping("/bidList/list")
     public String home(Model model) {
-        List<BidListResponseForList> bidList = service.getAllForList();
+        List<BidListResponseForList> bidList = GenericMapper.mapList(service.getAll(), new BidListResponseForList());
         model.addAttribute("bidLists", bidList);
         return "bidList/list";
     }
@@ -40,7 +41,7 @@ public class BidListController {
         }
         try {
             service.save(bid);
-            model.addAttribute("bidLists", service.getAllForList());
+            model.addAttribute("bidLists", GenericMapper.mapList(service.getAll(), new BidListResponseForList()));
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "bidList/add";
@@ -53,7 +54,7 @@ public class BidListController {
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
         try {
-            BidListResponseForUpdate bidListUpdateDto = service.toDTOForUpdate(id);
+            BidListResponseForUpdate bidListUpdateDto = GenericMapper.mapOne(service.getById(id), new BidListResponseForUpdate());
             model.addAttribute("bidList", bidListUpdateDto);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

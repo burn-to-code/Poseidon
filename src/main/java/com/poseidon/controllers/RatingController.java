@@ -1,7 +1,7 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.Rating;
-import com.poseidon.services.RatingCrudService;
+import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class RatingController {
 
-    private final RatingCrudService service;
+    private final CrudInterface<Rating> service;
 
     @RequestMapping("/rating/list")
     public String home(Model model)
