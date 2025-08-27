@@ -1,7 +1,7 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.Rating;
-import com.poseidon.services.RatingService;
+import com.poseidon.services.RatingCrudService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class RatingController {
 
-    private final RatingService ratingService;
+    private final RatingCrudService service;
 
     @RequestMapping("/rating/list")
     public String home(Model model)
     {
-        model.addAttribute("ratings", ratingService.findAll());
+        model.addAttribute("ratings", service.getAll());
 
         return "rating/list";
     }
@@ -38,18 +38,20 @@ public class RatingController {
         if (result.hasErrors()) {
             return "rating/add";
         }
+        try {
+            service.save(rating);
+            model.addAttribute("ratings", service.getAll());
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
 
-        ratingService.saveRating(rating);
-
-        model.addAttribute("ratings", ratingService.findAll());
         return "redirect:/rating/list";
     }
 
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         try {
-            ratingService.findById(id);
-            model.addAttribute("rating", ratingService.findById(id));
+            model.addAttribute("rating", service.getById(id));
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "redirect:/rating/list";
@@ -66,7 +68,7 @@ public class RatingController {
         }
 
         try {
-            ratingService.updateRatingById(id, rating);
+            service.update(id, rating);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -77,7 +79,7 @@ public class RatingController {
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
         try {
-            ratingService.deleteRatingById(id);
+            service.deleteById(id);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }

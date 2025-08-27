@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
-public class AbstractCrudService<MODEL extends BaseEntity<MODEL>> implements CrudInterface<MODEL> {
+public abstract class AbstractCrudService<MODEL extends BaseEntity<MODEL>> implements CrudInterface<MODEL> {
 
     protected final JpaRepository<MODEL, Integer> repository;
     

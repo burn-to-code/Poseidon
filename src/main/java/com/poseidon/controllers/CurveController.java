@@ -1,9 +1,8 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.CurvePoint;
-import com.poseidon.domain.DTO.CurvePointResponseForList;
 import com.poseidon.domain.DTO.CurvePointResponseForUpdate;
-import com.poseidon.services.CurvePointServices;
+import com.poseidon.services.CurvePointCrudService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,20 +13,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-
 @AllArgsConstructor
 @Controller
 public class CurveController {
 
-    private final CurvePointServices curvePointServices;
+    private final CurvePointCrudService service;
 
     @RequestMapping("/curvePoint/list")
     public String home(Model model)
     {
-        List<CurvePointResponseForList> response = curvePointServices.findAllForResponseList();
-
-        model.addAttribute("curvePoints", response);
+        try {
+            model.addAttribute("curvePoints", service.getAllForList());
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
 
         return "curvePoint/list";
     }
@@ -43,9 +42,13 @@ public class CurveController {
             return "curvePoint/add";
         }
 
-        curvePointServices.saveCurvePoint(curvePoint);
+        try {
+            service.save(curvePoint);
+            model.addAttribute("curvePoints", service.getAllForList());
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
 
-        model.addAttribute("curvePoints", curvePointServices.findAllForResponseList());
         return "redirect:/curvePoint/list";
     }
 
@@ -53,7 +56,7 @@ public class CurveController {
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
         try {
-            CurvePointResponseForUpdate response = curvePointServices.getUpdateCurvePointById(id);
+            CurvePointResponseForUpdate response = service.toDTOForUpdate(id);
             model.addAttribute("curvePoint", response);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
@@ -69,7 +72,7 @@ public class CurveController {
         }
 
         try {
-            curvePointServices.updateCurvePointById(id, curvePoint);
+            service.update(id, curvePoint);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -80,7 +83,7 @@ public class CurveController {
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         try {
-            curvePointServices.deleteCurvePointById(id);
+            service.deleteById(id);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }

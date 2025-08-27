@@ -1,7 +1,7 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.RuleName;
-import com.poseidon.services.RuleNameService;
+import com.poseidon.services.RuleNameCrudService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class RuleNameController {
 
-    private final RuleNameService ruleNameService;
+    private final RuleNameCrudService service;
 
     @RequestMapping("/ruleName/list")
     public String home(Model model)
     {
-        model.addAttribute("ruleNames", ruleNameService.findAll());
+        model.addAttribute("ruleNames", service.getAll());
         return "ruleName/list";
     }
 
@@ -38,12 +38,12 @@ public class RuleNameController {
         }
 
         try {
-            ruleNameService.saveRuleName(ruleName);
+            service.save(ruleName);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
 
-        model.addAttribute("ruleNames", ruleNameService.findAll());
+        model.addAttribute("ruleNames", service.getAll());
 
         return "redirect:/ruleName/list";
     }
@@ -51,7 +51,7 @@ public class RuleNameController {
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         try {
-            model.addAttribute("ruleName", ruleNameService.findById(id));
+            model.addAttribute("ruleName", service.getById(id));
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -66,7 +66,7 @@ public class RuleNameController {
         }
 
         try {
-            ruleNameService.updateRuleNameById(id, ruleName);
+            service.update(id, ruleName);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -77,7 +77,7 @@ public class RuleNameController {
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
         try {
-            ruleNameService.deleteRuleNameById(id);
+            service.deleteById(id);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }

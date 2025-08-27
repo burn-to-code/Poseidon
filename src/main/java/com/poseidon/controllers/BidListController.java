@@ -3,7 +3,7 @@ package com.poseidon.controllers;
 import com.poseidon.domain.BidList;
 import com.poseidon.domain.DTO.BidListResponseForList;
 import com.poseidon.domain.DTO.BidListResponseForUpdate;
-import com.poseidon.services.BidListServiceImpl;
+import com.poseidon.services.BidListCrudService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,12 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BidListController {
 
-    private final BidListServiceImpl bidListService;
+    private final BidListCrudService service;
 
     @RequestMapping("/bidList/list")
-    public String home(Model model)
-    {
-        List<BidListResponseForList> bidList = bidListService.getBidListForResponseList();
+    public String home(Model model) {
+        List<BidListResponseForList> bidList = service.getAllForList();
         model.addAttribute("bidLists", bidList);
         return "bidList/list";
     }
@@ -39,37 +38,41 @@ public class BidListController {
         if (result.hasErrors()) {
             return "bidList/add";
         }
+        try {
+            service.save(bid);
+            model.addAttribute("bidLists", service.getAllForList());
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "bidList/add";
+        }
 
-        bidListService.saveBidList(bid);
-
-        model.addAttribute("bidLists", bidListService.getBidListForResponseList());
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        BidListResponseForUpdate bidList;
 
         try {
-            bidList = bidListService.getBidListByIdForResponse(id);
+            BidListResponseForUpdate bidListUpdateDto = service.toDTOForUpdate(id);
+            model.addAttribute("bidList", bidListUpdateDto);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "redirect:/bidList/list";
         }
 
-        model.addAttribute("bidList", bidList);
+
         return "bidList/update";
     }
 
     @PostMapping("/bidList/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid BidListResponseForUpdate bidListDto,
+    public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "bidList/update";
         }
 
         try {
-            bidListService.updateBidListById(id, bidListDto);
+            service.update(id, bidList);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "bidList/update";
@@ -80,7 +83,7 @@ public class BidListController {
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         try {
-            bidListService.deleteBidListById(id);
+            service.deleteById(id);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }

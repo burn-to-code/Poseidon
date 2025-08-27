@@ -1,7 +1,7 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.Trade;
-import com.poseidon.services.TradeServiceImpl;
+import com.poseidon.services.TradeCrudService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class TradeController {
 
-    private final TradeServiceImpl tradeService;
+    private final TradeCrudService service;
 
     @RequestMapping("/trade/list")
     public String home(Model model)
     {
-        model.addAttribute("trades", tradeService.findAll());
+        model.addAttribute("trades", service.getAllForList());
         return "trade/list";
     }
 
@@ -38,7 +38,7 @@ public class TradeController {
         }
 
         try {
-            tradeService.saveTrade(trade);
+            service.save(trade);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -48,7 +48,7 @@ public class TradeController {
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         try {
-            model.addAttribute("trade", tradeService.getTradeByIdForAddForm(id));
+            model.addAttribute("trade", service.toDTOForUpdate(id));
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "redirect:/trade/list";
@@ -64,7 +64,7 @@ public class TradeController {
         }
 
         try {
-            tradeService.updateTradeById(id, trade);
+            service.update(id, trade);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -75,7 +75,7 @@ public class TradeController {
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         try {
-            tradeService.deleteTradeById(id);
+            service.deleteById(id);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
