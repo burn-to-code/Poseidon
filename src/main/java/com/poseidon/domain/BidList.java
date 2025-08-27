@@ -16,7 +16,7 @@ import java.util.Date;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "bidlist", schema = "demo")
-public class BidList {
+public class BidList implements BaseEntity<BidList>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -108,4 +108,13 @@ public class BidList {
         this.bidQuantity = bidQuantity;
     }
 
+    public Integer getId(){
+        return bidListId;
+    }
+
+    public void update(BidList bidList){
+        this.account = bidList.getAccount();
+        this.type = bidList.getType();
+        this.bidQuantity = bidList.getBidQuantity();
+    }
 }

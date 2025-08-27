@@ -14,7 +14,7 @@ import java.util.Date;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "curvepoint", schema = "demo")
-public class CurvePoint {
+public class CurvePoint  implements BaseEntity<CurvePoint>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id", nullable = false)
@@ -42,5 +42,12 @@ public class CurvePoint {
         this.curveId = i;
         this.value = v;
         this.term = v1;
+    }
+
+    @Override
+    public void update(CurvePoint curvePoint) {
+        this.curveId = curvePoint.getCurveId();
+        this.term = curvePoint.getTerm();
+        this.value = curvePoint.getValue();
     }
 }

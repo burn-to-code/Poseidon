@@ -15,7 +15,7 @@ import java.time.Instant;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "trade", schema = "demo")
-public class Trade {
+public class Trade implements BaseEntity<Trade>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "TradeId", nullable = false)
@@ -100,5 +100,17 @@ public class Trade {
     public Trade(String tradeAccount, String type) {
         this.account = tradeAccount;
         this.type = type;
+    }
+
+    public Integer getId(){
+        return tradeId;
+    }
+
+    @Override
+    public void update(Trade trade) {
+        this.account = trade.getAccount();
+        this.type = trade.getType();
+        this.buyQuantity = trade.getBuyQuantity();
+        this.sellQuantity = trade.getSellQuantity();
     }
 }

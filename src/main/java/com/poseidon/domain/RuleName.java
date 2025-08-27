@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "rulename", schema = "demo")
-public class RuleName {
+public class RuleName implements BaseEntity<RuleName>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id", nullable = false)
@@ -48,5 +48,15 @@ public class RuleName {
         this.template = template;
         this.sqlStr = sql;
         this.sqlPart = sqlPart;
+    }
+
+    @Override
+    public void update(RuleName ruleName) {
+        this.name = ruleName.getName();
+        this.description = ruleName.getDescription();
+        this.json = ruleName.getJson();
+        this.template = ruleName.getTemplate();
+        this.sqlStr = ruleName.getSqlStr();
+        this.sqlPart = ruleName.getSqlPart();
     }
 }

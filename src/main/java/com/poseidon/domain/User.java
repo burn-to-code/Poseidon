@@ -12,7 +12,7 @@ import lombok.Setter;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "users", schema = "demo")
-public class User {
+public class User implements BaseEntity<User>{
     @Id
     @Column(name = "Id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,4 +38,10 @@ public class User {
     @NotBlank(message = "Role is mandatory")
     private String role;
 
+    @Override
+    public void update(User user) {
+        this.fullname = user.getFullname();
+        this.role = user.getRole();
+        this.username = user.getUsername();
+    }
 }

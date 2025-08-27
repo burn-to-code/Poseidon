@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "rating", schema = "demo")
-public class Rating {
+public class Rating implements BaseEntity<Rating>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id", nullable = false)
@@ -37,5 +37,13 @@ public class Rating {
         this.sandPRating = sandPRating;
         this.fitchRating = fitchRating;
         this.orderNumber = orderNumber;
+    }
+
+    @Override
+    public void update(Rating rating) {
+        this.moodysRating = rating.getMoodysRating();
+        this.sandPRating = rating.getSandPRating();
+        this.fitchRating = rating.getFitchRating();
+        this.orderNumber = rating.getOrderNumber();
     }
 }
