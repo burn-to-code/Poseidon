@@ -1,6 +1,7 @@
 package com.poseidon.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class RuleName implements BaseEntity<RuleName>{
     private Integer id;
 
     @Size(max = 125)
+    @NotBlank(message = "Rule name is mandatory")
     @Column(name = "name", length = 125)
     private String name;
 

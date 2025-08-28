@@ -1,6 +1,8 @@
 package com.poseidon.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +20,21 @@ public class Rating implements BaseEntity<Rating>{
     private Integer id;
 
     @Size(max = 125)
+    @NotBlank(message = "moodys is mandatory")
     @Column(name = "moodysRating", length = 125)
     private String moodysRating;
 
     @Size(max = 125)
+    @NotBlank(message = "sandp is mandatory")
     @Column(name = "sandPRating", length = 125)
     private String sandPRating;
 
     @Size(max = 125)
+    @NotBlank(message = "fitch is mandatory")
     @Column(name = "fitchRating", length = 125)
     private String fitchRating;
 
+    @Min(value = 1, message = "order number must be greater than 0")
     @Column(name = "orderNumber")
     private int orderNumber;
 

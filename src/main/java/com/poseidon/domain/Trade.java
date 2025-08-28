@@ -1,7 +1,7 @@
 package com.poseidon.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +22,12 @@ public class Trade implements BaseEntity<Trade>{
     private Integer tradeId;
 
     @Size(max = 30)
-    @NotNull
+    @NotBlank(message = "Account is mandatory")
     @Column(name = "account", nullable = false, length = 30)
     private String account;
 
     @Size(max = 30)
-    @NotNull
+    @NotBlank(message = "Type is mandatory")
     @Column(name = "type", nullable = false, length = 30)
     private String type;
 
