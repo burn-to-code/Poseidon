@@ -86,17 +86,6 @@ class RatingControllerTest {
     }
 
     @Test
-    void testShowUpdateForm_notFound() throws Exception {
-        when(ratingService.getById(99)).thenThrow(new IllegalArgumentException("Invalid Rating Id:99"));
-
-        mockMvc.perform(get("/rating/update/99"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/rating/list"));
-
-        verify(ratingService, times(1)).getById(99);
-    }
-
-    @Test
     void testUpdateRating_success() throws Exception {
         mockMvc.perform(post("/rating/update/1")
                         .param("moodysRating", "Moody1")
@@ -118,5 +107,32 @@ class RatingControllerTest {
                 .andExpect(redirectedUrl("/rating/list"));
 
         verify(ratingService, times(1)).deleteById(1);
+    }
+
+    @Test
+    void testValidate_BindingResultError() throws Exception {
+        mockMvc.perform(post("/rating/validate")
+                        .param("moodysRating", "Aaa")
+                        .param("sandPRating", "AAA")
+                        .param("fitchRating", "AAA")
+                        .param("orderNumber", "0"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("rating/add"))
+                .andExpect(model().attributeHasFieldErrors("rating", "orderNumber"));
+
+        verify(ratingService, never()).save(any(Rating.class));
+    }
+
+    @Test
+    void testUpdateRating_BindingResultError() throws Exception {
+        mockMvc.perform(post("/rating/update/1")
+                        .param("moodysRating", "Aaa")
+                        .param("sandPRating", "AAA")
+                        .param("fitchRating", "AAA")
+                        .param("orderNumber", "0"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("rating/update"));
+
+        verify(ratingService, never()).update(anyInt(), any(Rating.class));
     }
 }

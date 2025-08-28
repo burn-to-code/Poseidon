@@ -68,8 +68,8 @@ class RuleNameControllerTest {
     @Test
     void validate_withValidationErrors_shouldReturnAddView() throws Exception {
         mockMvc.perform(post("/ruleName/validate"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/ruleName/list"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("ruleName/add"));
     }
 
     @Test
@@ -97,8 +97,8 @@ class RuleNameControllerTest {
     @Test
     void updateRuleName_withValidationErrors_shouldReturnUpdateView() throws Exception {
         mockMvc.perform(post("/ruleName/update/1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/ruleName/list"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("ruleName/update"));
     }
 
     @Test
@@ -109,4 +109,38 @@ class RuleNameControllerTest {
 
         verify(ruleNameService, times(1)).deleteById(1);
     }
+
+    @Test
+    void testValidate_BindingResultError() throws Exception {
+        mockMvc.perform(post("/ruleName/validate")
+                        .param("name", "")
+                        .param("description", "desc")
+                        .param("json", "json")
+                        .param("template", "template")
+                        .param("sqlStr", "sql")
+                        .param("sqlPart", "sqlPart"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("ruleName/add"))
+                .andExpect(model().attributeHasFieldErrors("ruleName", "name"));
+
+        verify(ruleNameService, never()).save(any(RuleName.class));
+    }
+
+    @Test
+    void testUpdate_BindingResultError() throws Exception {
+        mockMvc.perform(post("/ruleName/update/1")
+                        .param("name", "")
+                        .param("description", "desc")
+                        .param("json", "json")
+                        .param("template", "template")
+                        .param("sqlStr", "sql")
+                        .param("sqlPart", "sqlPart"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("ruleName/update"))
+                .andExpect(model().attributeHasFieldErrors("ruleName", "name"));
+
+        verify(ruleNameService, never()).update(anyInt(), any(RuleName.class));
+    }
+
+
 }

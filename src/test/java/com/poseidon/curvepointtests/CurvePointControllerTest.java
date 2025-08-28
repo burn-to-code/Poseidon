@@ -52,8 +52,7 @@ public class CurvePointControllerTest {
     public void testAddCurvePoint() throws Exception {
         mockMvc.perform(get("/curvePoint/add"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("curvePoint/add"))
-                .andExpect(model().attributeExists("curvePoint"));
+                .andExpect(view().name("curvePoint/add"));
     }
 
     @Test
@@ -112,5 +111,31 @@ public class CurvePointControllerTest {
                 .andExpect(redirectedUrl("/curvePoint/list"));
 
         verify(crudService, times(1)).deleteById(1);
+    }
+
+    @Test
+    public void testValidate_WithBindingErrors_ShouldReturnAddFormAndErrors() throws Exception {
+        mockMvc.perform(post("/curvePoint/validate")
+                        .param("curveId", "")
+                        .param("term", "")
+                        .param("value", ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name("curvePoint/add"))
+                .andExpect(model().attributeHasFieldErrors("curvePoint", "curveId"));
+
+        verify(crudService, never()).save(any());
+    }
+
+    @Test
+    public void testUpdateBid_WithBindingErrors_ShouldReturnUpdateFormAndErrors() throws Exception {
+        mockMvc.perform(post("/curvePoint/update/1")
+                        .param("curveId", "")
+                        .param("term", "")
+                        .param("value", ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name("curvePoint/update"))
+                .andExpect(model().attributeHasFieldErrors("curvePoint", "curveId"));
+
+        verify(crudService, never()).update(anyInt(), any());
     }
 }

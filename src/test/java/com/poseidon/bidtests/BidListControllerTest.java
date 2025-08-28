@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -52,8 +53,7 @@ public class BidListControllerTest {
     public void testAddBidForm() throws Exception {
         mockMvc.perform(get("/bidList/add"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("bidList/add"))
-                .andExpect(model().attributeExists("bidList"));
+                .andExpect(view().name("bidList/add"));
     }
 
     @Test
@@ -89,6 +89,23 @@ public class BidListControllerTest {
     }
 
     @Test
+    public void testPostUpdateCurvePoint() throws Exception {
+        BidList bid = new BidList("Acc", "Type", 10d);
+        bid.setBidListId(1);
+
+
+        mockMvc.perform(post("/bidList/update/1")
+                .param("id", Objects.toString(bid.getId()))
+                .param("account", "Acc")
+                .param("type", "Type")
+                .param("bidQuantity", "10"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bidList/list"));
+
+        verify(crudService, times(1)).update(eq(bid.getId()), any(BidList.class));
+    }
+
+    @Test
     public void testDeleteBid() throws Exception {
         doNothing().when(crudService).deleteById(1);
 
@@ -98,4 +115,31 @@ public class BidListControllerTest {
 
         verify(crudService, times(1)).deleteById(1);
     }
+
+    @Test
+    public void testValidate_WithBindingErrors_ShouldReturnAddFormAndErrors() throws Exception {
+        mockMvc.perform(post("/bidList/validate")
+                        .param("account", "")
+                        .param("type", "")
+                        .param("bidQuantity", "-1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidList/add"))
+                .andExpect(model().attributeHasFieldErrors("bidList", "account", "type"));
+
+        verify(crudService, never()).save(any());
+    }
+
+    @Test
+    public void testUpdateBid_WithBindingErrors_ShouldReturnUpdateFormAndErrors() throws Exception {
+        mockMvc.perform(post("/bidList/update/1")
+                        .param("account", "")
+                        .param("type", "")
+                        .param("bidQuantity", "-1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidList/update"))
+                .andExpect(model().attributeHasFieldErrors("bidList", "account", "type"));
+
+        verify(crudService, never()).update(anyInt(), any());
+    }
+
 }

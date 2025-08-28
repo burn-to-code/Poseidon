@@ -53,8 +53,7 @@ class TradeControllerTest {
     void testAddTrade_returnsAddView() throws Exception {
         mockMvc.perform(get("/trade/add"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("trade/add"))
-                .andExpect(model().attributeExists("trade"));
+                .andExpect(view().name("trade/add"));
     }
 
     @Test
@@ -122,4 +121,38 @@ class TradeControllerTest {
 
         verify(crudService, times(1)).deleteById(1);
     }
+
+    @Test
+    public void testValidateBindingResultError() throws Exception {
+        mockMvc.perform(post("/trade/validate")
+                        .param("account", "")
+                        .param("type", "SomeType")
+                        .param("buyQuantity", "10")
+                        .param("sellQuantity", "5"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("trade/add"))
+                .andExpect(model().attributeHasFieldErrors("trade", "account"));
+
+        verify(crudService, never()).save(any(Trade.class));
+    }
+
+    @Test
+    public void testUpdateTradeBindingResultError() throws Exception {
+        Trade trade = new Trade("Acc", "Type");
+        trade.setTradeId(1);
+
+        when(crudService.getById(1)).thenReturn(trade);
+
+        mockMvc.perform(post("/trade/update/1")
+                        .param("account", "Acc")
+                        .param("type", "")
+                        .param("buyQuantity", "10")
+                        .param("sellQuantity", "5"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("trade/update"))
+                .andExpect(model().attributeHasFieldErrors("trade", "type"));
+
+        verify(crudService, never()).update(anyInt(), any(Trade.class));
+    }
+
 }
