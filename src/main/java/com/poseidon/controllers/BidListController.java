@@ -29,8 +29,7 @@ public class BidListController {
     }
 
     @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid, Model model) {
-        model.addAttribute("bidList", bid);
+    public String addBidForm() {
         return "bidList/add";
     }
 
@@ -39,13 +38,9 @@ public class BidListController {
         if (result.hasErrors()) {
             return "bidList/add";
         }
-        try {
-            service.save(bid);
-            model.addAttribute("bidLists", GenericMapper.mapList(service.getAll(), new BidListResponseForList()));
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "bidList/add";
-        }
+
+        service.save(bid);
+        model.addAttribute("bidLists", GenericMapper.mapList(service.getAll(), new BidListResponseForList()));
 
         return "redirect:/bidList/list";
     }
@@ -53,14 +48,8 @@ public class BidListController {
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
-        try {
-            BidListResponseForUpdate bidListUpdateDto = GenericMapper.mapOne(service.getById(id), new BidListResponseForUpdate());
-            model.addAttribute("bidList", bidListUpdateDto);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "redirect:/bidList/list";
-        }
-
+        BidListResponseForUpdate bidListUpdateDto = GenericMapper.mapOne(service.getById(id), new BidListResponseForUpdate());
+        model.addAttribute("bidList", bidListUpdateDto);
 
         return "bidList/update";
     }
@@ -72,22 +61,19 @@ public class BidListController {
             return "bidList/update";
         }
 
-        try {
-            service.update(id, bidList);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "bidList/update";
-        }
+        service.update(id, bidList);
+
+        model.addAttribute("bidLists", GenericMapper.mapList(service.getAll(), new BidListResponseForList()));
+
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        try {
-            service.deleteById(id);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+
+        service.deleteById(id);
+
+        model.addAttribute("bidLists", GenericMapper.mapList(service.getAll(), new BidListResponseForList()));
 
         return "redirect:/bidList/list";
     }

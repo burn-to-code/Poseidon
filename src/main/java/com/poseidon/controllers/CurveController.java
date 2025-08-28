@@ -22,19 +22,15 @@ public class CurveController {
     private final CrudInterface<CurvePoint> service;
 
     @RequestMapping("/curvePoint/list")
-    public String home(Model model)
-    {
-        try {
-            model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+    public String home(Model model) {
+
+        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
 
         return "curvePoint/list";
     }
 
     @GetMapping("/curvePoint/add")
-    public String addBidForm(CurvePoint bid) {
+    public String addBidForm() {
         return "curvePoint/add";
     }
 
@@ -44,12 +40,8 @@ public class CurveController {
             return "curvePoint/add";
         }
 
-        try {
-            service.save(curvePoint);
-            model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+        service.save(curvePoint);
+        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
 
         return "redirect:/curvePoint/list";
     }
@@ -57,12 +49,9 @@ public class CurveController {
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
-        try {
-            CurvePointResponseForUpdate response = GenericMapper.mapOne(service.getById(id), new CurvePointResponseForUpdate());
-            model.addAttribute("curvePoint", response);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+        CurvePointResponseForUpdate response = GenericMapper.mapOne(service.getById(id), new CurvePointResponseForUpdate());
+        model.addAttribute("curvePoint", response);
+
         return "curvePoint/update";
     }
 
@@ -73,22 +62,19 @@ public class CurveController {
             return "curvePoint/update";
         }
 
-        try {
-            service.update(id, curvePoint);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+        service.update(id, curvePoint);
+
+        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
 
         return "redirect:/curvePoint/list";
     }
 
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        try {
-            service.deleteById(id);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+
+        service.deleteById(id);
+
+        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
 
         return "redirect:/curvePoint/list";
     }

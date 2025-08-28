@@ -27,7 +27,7 @@ public class RuleNameController {
     }
 
     @GetMapping("/ruleName/add")
-    public String addRuleForm(RuleName bid) {
+    public String addRuleForm() {
         return "ruleName/add";
     }
 
@@ -37,11 +37,7 @@ public class RuleNameController {
             return "ruleName/add";
         }
 
-        try {
-            service.save(ruleName);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+        service.save(ruleName);
 
         model.addAttribute("ruleNames", service.getAll());
 
@@ -50,11 +46,9 @@ public class RuleNameController {
 
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        try {
-            model.addAttribute("ruleName", service.getById(id));
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+
+        model.addAttribute("ruleName", service.getById(id));
+
         return "ruleName/update";
     }
 
@@ -65,22 +59,20 @@ public class RuleNameController {
             return "ruleName/update";
         }
 
-        try {
-            service.update(id, ruleName);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+        service.update(id, ruleName);
+
+        model.addAttribute("ruleNames", service.getAll());
 
         return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
-        try {
-            service.deleteById(id);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+
+        service.deleteById(id);
+
+        model.addAttribute("ruleNames", service.getAll());
+
         return "redirect:/ruleName/list";
     }
 }

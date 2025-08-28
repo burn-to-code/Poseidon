@@ -30,7 +30,7 @@ public class TradeController {
     }
 
     @GetMapping("/trade/add")
-    public String addUser(Trade bid) {
+    public String addUser() {
         return "trade/add";
     }
 
@@ -40,22 +40,18 @@ public class TradeController {
             return "trade/add";
         }
 
-        try {
-            service.save(trade);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+        service.save(trade);
+
+        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new TradeResponseForList()));
+
         return "redirect:/trade/list";
     }
 
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        try {
-            model.addAttribute("trade", GenericMapper.mapOne(service.getById(id), new TradeResponseForUpdate()));
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "redirect:/trade/list";
-        }
+
+        model.addAttribute("trade", GenericMapper.mapOne(service.getById(id), new TradeResponseForUpdate()));
+
         return "trade/update";
     }
 
@@ -66,22 +62,20 @@ public class TradeController {
             return "trade/update";
         }
 
-        try {
-            service.update(id, trade);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+        service.update(id, trade);
+
+        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new TradeResponseForList()));
 
         return "redirect:/trade/list";
     }
 
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
-        try {
-            service.deleteById(id);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+
+        service.deleteById(id);
+
+        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new TradeResponseForList()));
+
         return "redirect:/trade/list";
     }
 }

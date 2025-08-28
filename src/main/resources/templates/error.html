@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Erreur</title>
+</head>
+<body>
+    <h3>Une erreur est survenue</h3>
+    Logged in user: <b th:inline="text"  class="user"><span sec:authentication="principal.username"></span> </b>
+    <p th:text="${errorMsg}">Erreur inconnue</p>
+    <a th:href="@{/bidList/list}">Retour à la liste</a>
+</body>
+</html>

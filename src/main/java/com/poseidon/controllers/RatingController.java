@@ -29,7 +29,7 @@ public class RatingController {
     }
 
     @GetMapping("/rating/add")
-    public String addRatingForm(Rating rating) {
+    public String addRatingForm() {
         return "rating/add";
     }
 
@@ -38,24 +38,17 @@ public class RatingController {
         if (result.hasErrors()) {
             return "rating/add";
         }
-        try {
-            service.save(rating);
-            model.addAttribute("ratings", service.getAll());
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+
+        service.save(rating);
+        model.addAttribute("ratings", service.getAll());
 
         return "redirect:/rating/list";
     }
 
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        try {
-            model.addAttribute("rating", service.getById(id));
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "redirect:/rating/list";
-        }
+
+        model.addAttribute("rating", service.getById(id));
 
         return "rating/update";
     }
@@ -67,22 +60,19 @@ public class RatingController {
             return "rating/update";
         }
 
-        try {
-            service.update(id, rating);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+        service.update(id, rating);
+
+        model.addAttribute("ratings", service.getAll());
 
         return "redirect:/rating/list";
     }
 
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
-        try {
-            service.deleteById(id);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
+
+        service.deleteById(id);
+
+        model.addAttribute("ratings", service.getAll());
         return "redirect:/rating/list";
     }
 }
