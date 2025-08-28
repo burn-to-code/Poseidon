@@ -12,7 +12,7 @@ public class CurvePointResponseForList implements ConvertibleDtoFromEntity<Curve
 
     private Integer id;
 
-    private int curvePointId;
+    private Integer curvePointId;
 
     private Double term;
 

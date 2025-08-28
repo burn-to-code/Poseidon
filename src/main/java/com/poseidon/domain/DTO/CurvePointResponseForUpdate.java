@@ -11,6 +11,7 @@ import lombok.Setter;
 public class CurvePointResponseForUpdate implements ConvertibleDtoFromEntity<CurvePoint, CurvePointResponseForUpdate> {
 
     private Integer id;
+    private int curveId;
     private double term;
     private double value;
 
@@ -19,6 +20,6 @@ public class CurvePointResponseForUpdate implements ConvertibleDtoFromEntity<Cur
 
     @Override
     public CurvePointResponseForUpdate fromEntity(CurvePoint curvePoint) {
-        return new CurvePointResponseForUpdate(curvePoint.getId(), curvePoint.getTerm(), curvePoint.getValue());
+        return new CurvePointResponseForUpdate(curvePoint.getId(), curvePoint.getCurveId(), curvePoint.getTerm(), curvePoint.getValue());
     }
 }

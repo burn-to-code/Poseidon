@@ -26,12 +26,12 @@ public class CurvePointTests {
 		// Save
 		curvePoint = curvePointRepository.save(curvePoint);
 		Assert.assertNotNull(curvePoint.getId());
-        Assert.assertEquals(10, curvePoint.getCurveId());
+        Assert.assertEquals(Integer.valueOf(10), curvePoint.getCurveId());
 
 		// Update
 		curvePoint.setCurveId(20);
 		curvePoint = curvePointRepository.save(curvePoint);
-        Assert.assertEquals(20, curvePoint.getCurveId());
+        Assert.assertEquals(Integer.valueOf(20), curvePoint.getCurveId());
 
 		// Find
 		List<CurvePoint> listResult = curvePointRepository.findAll();

@@ -22,7 +22,7 @@ public class CurvePoint  implements BaseEntity<CurvePoint>{
 
     @Column(name = "CurveId")
     @NotNull(message = "must not be null")
-    private int curveId;
+    private Integer curveId;
 
     @Column(name = "asOfDate")
     private Date asOfDate;
