@@ -6,13 +6,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from a repository -->
 	</parent>
 	<groupId>com</groupId>
 	<artifactId>poseidon</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>poseidon</name>
-	<description>Project RestApi For Traiding App</description>
+	<description>Project RestApi For Trading App</description>
 	<url/>
 	<licenses>
 		<license/>

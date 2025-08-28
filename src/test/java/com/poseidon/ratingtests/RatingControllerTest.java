@@ -82,7 +82,7 @@ class RatingControllerTest {
                 .andExpect(view().name("rating/update"))
                 .andExpect(model().attributeExists("rating"));
 
-        verify(ratingService, times(1)).getById(1); // appelé 2 fois dans le contrôleur
+        verify(ratingService, times(1)).getById(1);
     }
 
     @Test
