@@ -1,7 +1,9 @@
 package com.poseidon.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ public class Trade implements BaseEntity<Trade>{
     private String type;
 
     @Column(name = "buyQuantity")
+    @Min(value = 0, message = "Buy quantity should be greater than zero")
+    @NotNull(message = "Buy quantity is mandatory")
     private Double buyQuantity;
 
     @Column(name = "sellQuantity")

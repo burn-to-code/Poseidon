@@ -30,12 +30,13 @@ public class SpringSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
+                        .loginPage("/app/login")
                         .defaultSuccessUrl("/admin/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/app-logout")
-                        .logoutSuccessUrl("/home")
+                        .logoutSuccessUrl("/app/login?logout")
                         .permitAll()
                 )
                 .userDetailsService(customUserDetailsService);
