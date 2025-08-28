@@ -1,10 +1,11 @@
 package com.poseidon.controllers;
 
+import com.poseidon.domain.DTO.GenericMapper;
+import com.poseidon.domain.DTO.ResponseUserDto;
 import com.poseidon.domain.User;
-import com.poseidon.repositories.UserRepository;
+import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,17 +19,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final CrudInterface<User> service;
 
     @RequestMapping("/user/list")
     public String home(Model model)
     {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDto()));
         return "user/list";
     }
 
     @GetMapping("/user/add")
-    public String addUser(User bid) {
+    public String addUser() {
         return "user/add";
     }
 
@@ -37,8 +38,8 @@ public class UserController {
         if (!result.hasErrors()) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             user.setPassword(encoder.encode(user.getPassword()));
-            userRepository.save(user);
-            model.addAttribute("users", userRepository.findAll());
+            service.save(user);
+            model.addAttribute("users", service.getAll());
             return "redirect:/user/list";
         }
         return "user/add";
@@ -46,8 +47,7 @@ public class UserController {
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        user.setPassword("");
+        ResponseUserDto user = GenericMapper.mapOne(service.getById(id), new ResponseUserDto());
         model.addAttribute("user", user);
         return "user/update";
     }
@@ -62,16 +62,15 @@ public class UserController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
         user.setId(id);
-        userRepository.save(user);
-        model.addAttribute("users", userRepository.findAll());
+        service.save(user);
+        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDto()));
         return "redirect:/user/list";
     }
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        userRepository.delete(user);
-        model.addAttribute("users", userRepository.findAll());
+        service.deleteById(id);
+        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDto()));
         return "redirect:/user/list";
     }
 }
