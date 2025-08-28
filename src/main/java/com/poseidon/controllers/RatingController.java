@@ -29,7 +29,7 @@ public class RatingController {
     }
 
     @GetMapping("/rating/add")
-    public String addRatingForm() {
+    public String addRatingForm(Rating rating) {
         return "rating/add";
     }
 

@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/user/add")
-    public String addUser() {
+    public String addUser(User user) {
         return "user/add";
     }
 
