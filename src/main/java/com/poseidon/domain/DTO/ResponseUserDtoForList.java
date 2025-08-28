@@ -8,19 +8,19 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseUserDto implements ConvertibleDtoFromEntity<User, ResponseUserDto>{
+public class ResponseUserDtoForList implements ConvertibleDtoFromEntity<User, ResponseUserDtoForList>{
 
     private Integer id;
     private String username;
     private String fullname;
     private String role;
 
-    public ResponseUserDto() {
+    public ResponseUserDtoForList() {
 
     }
 
     @Override
-    public ResponseUserDto fromEntity(User user) {
-        return new ResponseUserDto(user.getId(), user.getUsername(), user.getFullname(), user.getRole());
+    public ResponseUserDtoForList fromEntity(User user) {
+        return new ResponseUserDtoForList(user.getId(), user.getUsername(), user.getFullname(), user.getRole());
     }
 }

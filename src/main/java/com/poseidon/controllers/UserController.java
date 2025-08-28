@@ -1,7 +1,8 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.DTO.GenericMapper;
-import com.poseidon.domain.DTO.ResponseUserDto;
+import com.poseidon.domain.DTO.ResponseUserDtoForList;
+import com.poseidon.domain.DTO.ResponseUserDtoForUpdate;
 import com.poseidon.domain.User;
 import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
@@ -24,7 +25,7 @@ public class UserController {
     @RequestMapping("/user/list")
     public String home(Model model)
     {
-        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDto()));
+        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDtoForList()));
         return "user/list";
     }
 
@@ -47,7 +48,8 @@ public class UserController {
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        ResponseUserDto user = GenericMapper.mapOne(service.getById(id), new ResponseUserDto());
+        ResponseUserDtoForUpdate user = GenericMapper.mapOne(service.getById(id), new ResponseUserDtoForUpdate());
+        user.setPassword("");
         model.addAttribute("user", user);
         return "user/update";
     }
@@ -63,14 +65,14 @@ public class UserController {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setId(id);
         service.save(user);
-        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDto()));
+        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDtoForList()));
         return "redirect:/user/list";
     }
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
         service.deleteById(id);
-        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDto()));
+        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDtoForList()));
         return "redirect:/user/list";
     }
 }
