@@ -77,6 +77,7 @@ public class CrudIT extends SetUpIT{
         assertTrue(entityTestUtils.isPresentEntity(entity));
     }
 
+    // ------------------ SHOW UPDATE FORM END POINT------------------
     @ParameterizedTest
     @MethodSource("com.poseidon.IT.support.TestDataProviders#entityProviderForShowUpdate")
     void testCrudOperationsUpdateShowForm(TestParamsWithEntityAndProperty params) throws Exception {
@@ -92,6 +93,7 @@ public class CrudIT extends SetUpIT{
 
     }
 
+    // ------------------ UPDATE END POINT------------------
     @ParameterizedTest
     @MethodSource("com.poseidon.IT.support.TestDataProviders#entityProviderForUpdateValidate")
     void testCrudOperationsUpdate(TestParamsWithEntityAndParam params) throws Exception {
@@ -112,6 +114,7 @@ public class CrudIT extends SetUpIT{
         assertTrue(entityTestUtils.isPresentEntity(entity));
     }
 
+    // ------------------ DELETE END POINT------------------
     @ParameterizedTest
     @MethodSource("com.poseidon.IT.support.TestDataProviders#entityProviderForDelete")
     void testCrudOperationsDelete(TestParamsWithEntity params) throws Exception {
