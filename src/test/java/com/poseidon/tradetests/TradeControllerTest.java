@@ -138,7 +138,7 @@ class TradeControllerTest {
 
     @Test
     public void testUpdateTradeBindingResultError() throws Exception {
-        Trade trade = new Trade("Acc", "Type");
+        Trade trade = new Trade("Acc", "Type", 10.0, 20.0);
         trade.setTradeId(1);
 
         when(crudService.getById(1)).thenReturn(trade);

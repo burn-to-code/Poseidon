@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @RequiredArgsConstructor
-@Table(name = "users", schema = "demo")
+@Table(name = "users")
 public class User implements BaseEntity<User>{
     @Id
     @Column(name = "Id", nullable = false)

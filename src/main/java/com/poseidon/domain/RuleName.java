@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @RequiredArgsConstructor
-@Table(name = "rulename", schema = "demo")
+@Table(name = "rulename")
 public class RuleName implements BaseEntity<RuleName>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

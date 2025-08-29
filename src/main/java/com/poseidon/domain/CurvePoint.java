@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @Entity
 @RequiredArgsConstructor
-@Table(name = "curvepoint", schema = "demo")
+@Table(name = "curvepoint")
 public class CurvePoint  implements BaseEntity<CurvePoint>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +30,7 @@ public class CurvePoint  implements BaseEntity<CurvePoint>{
     @Column(name = "term")
     private Double term;
 
-    @Column(name = "value")
+    @Column(name = "curve_value")
     private Double value;
 
     @Column(name = "creationDate")

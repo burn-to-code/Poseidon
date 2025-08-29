@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @RequiredArgsConstructor
-@Table(name = "rating", schema = "demo")
+@Table(name = "rating")
 public class Rating implements BaseEntity<Rating>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

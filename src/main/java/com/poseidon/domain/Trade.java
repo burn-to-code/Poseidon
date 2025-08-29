@@ -16,7 +16,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @RequiredArgsConstructor
-@Table(name = "trade", schema = "demo")
+@Table(name = "trade")
 public class Trade implements BaseEntity<Trade>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -101,9 +101,11 @@ public class Trade implements BaseEntity<Trade>{
     @Column(name = "side", length = 125)
     private String side;
 
-    public Trade(String tradeAccount, String type) {
+    public Trade(String tradeAccount, String type, Double buyQuantity, Double sellQuantity) {
         this.account = tradeAccount;
         this.type = type;
+        this.buyQuantity = buyQuantity;
+        this.sellQuantity = sellQuantity;
     }
 
     public Integer getId(){

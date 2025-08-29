@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @Entity
 @RequiredArgsConstructor
-@Table(name = "bidlist", schema = "demo")
+@Table(name = "bidlist")
 public class BidList implements BaseEntity<BidList>{
 
     @Id
