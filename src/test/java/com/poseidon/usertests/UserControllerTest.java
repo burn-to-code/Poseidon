@@ -66,7 +66,7 @@ class UserControllerTest {
 
         mockMvc.perform(post("/user/validate")
                         .param("username", "user1")
-                        .param("password", "pass123")
+                        .param("password", "Pass123!")
                         .param("role", "USER")
                         .param("fullname", "Full Name"))
                 .andExpect(status().is3xxRedirection())
@@ -101,13 +101,13 @@ class UserControllerTest {
 
         mockMvc.perform(post("/user/update/1")
                         .param("username", "user1")
-                        .param("password", "pass123")
+                        .param("password", "Pass123!")
                         .param("role", "USER")
                         .param("fullname", "Full Name"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/list"));
 
-        verify(service, times(1)).save(any(User.class));
+        verify(service, times(1)).update(any(), any(User.class));
     }
 
     // ------------------ /user/delete/{id} ------------------

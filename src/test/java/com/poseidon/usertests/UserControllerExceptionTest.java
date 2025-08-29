@@ -39,7 +39,7 @@ class UserControllerExceptionTest {
 
         mockMvc.perform(post("/user/validate")
                         .param("username", "user1")
-                        .param("password", "pass123")
+                        .param("password", "Pass123!")
                         .param("fullname", "Full Name")
                         .param("role", "USER"))
                 .andExpect(status().isOk())
@@ -61,11 +61,11 @@ class UserControllerExceptionTest {
     // ------------------ /user/update/{id} POST ------------------
     @Test
     void testUpdateUser_WhenServiceThrowsException_ShouldRenderErrorPage() throws Exception {
-        doThrow(new IllegalArgumentException("DB error")).when(service).save(any(User.class));
+        doThrow(new IllegalArgumentException("DB error")).when(service).update(any(), any(User.class));
 
         mockMvc.perform(post("/user/update/1")
                         .param("username", "user1")
-                        .param("password", "pass123")
+                        .param("password", "Pass123!")
                         .param("fullname", "Full Name")
                         .param("role", "USER"))
                 .andExpect(status().isOk())

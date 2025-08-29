@@ -2,6 +2,7 @@ package com.poseidon.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,10 @@ public class User implements BaseEntity<User>{
     @Size(max = 125)
     @Column(name = "password", length = 125)
     @NotBlank(message = "Password is mandatory")
+    @Pattern(
+            regexp = "(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}",
+            message = "Password must be at least 8 characters long, contain one uppercase, one lowercase, one digit and one special character"
+    )
     private String password;
 
     @Size(max = 125)

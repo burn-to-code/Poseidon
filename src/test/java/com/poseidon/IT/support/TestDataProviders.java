@@ -90,7 +90,7 @@ public class TestDataProviders {
                             User u = new User();
                             u.setUsername("newUniqueUsername");
                             u.setFullname("Test User");
-                            u.setPassword("NewPassword");
+                            u.setPassword("NewPassword02!");
                             u.setRole("USER");
                             return u;
                         })
@@ -201,7 +201,7 @@ public class TestDataProviders {
                             User u = new User();
                             u.setUsername("newUniqueUsername");
                             u.setFullname("Test User");
-                            u.setPassword("NewPassword");
+                            u.setPassword("NewPassword02!");
                             u.setRole("USER");
                             return u;
                         },
@@ -332,7 +332,7 @@ public class TestDataProviders {
                             User u = new User();
                             u.setUsername("newUniqueUsername29232");
                             u.setFullname("Test User");
-                            u.setPassword("NewPassword");
+                            u.setPassword("NewPassword02!");
                             u.setRole("USER");
                             return u;
                         },
@@ -418,7 +418,7 @@ public class TestDataProviders {
                             User u = new User();
                             u.setUsername("newUniqueUsername29232");
                             u.setFullname("Test User");
-                            u.setPassword("NewPassword");
+                            u.setPassword("NewPassword02!");
                             u.setRole("USER");
                             return u;
                         }
