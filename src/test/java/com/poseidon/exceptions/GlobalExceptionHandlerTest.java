@@ -1,4 +1,4 @@
-package com.poseidon;
+package com.poseidon.exceptions;
 
 import com.poseidon.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.Test;

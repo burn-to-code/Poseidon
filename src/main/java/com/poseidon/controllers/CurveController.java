@@ -1,8 +1,8 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.CurvePoint;
-import com.poseidon.domain.DTO.CurvePointResponseForList;
-import com.poseidon.domain.DTO.CurvePointResponseForUpdate;
+import com.poseidon.domain.DTO.ResponseCurvePointForList;
+import com.poseidon.domain.DTO.ResponseCurvePointForUpdate;
 import com.poseidon.domain.DTO.GenericMapper;
 import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ public class CurveController {
     @RequestMapping("/curvePoint/list")
     public String home(Model model) {
 
-        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
+        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList()));
 
         return "curvePoint/list";
     }
@@ -39,7 +39,7 @@ public class CurveController {
         }
 
         service.save(curvePoint);
-        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
+        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList()));
 
         return "redirect:/curvePoint/list";
     }
@@ -47,7 +47,7 @@ public class CurveController {
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
-        CurvePointResponseForUpdate response = GenericMapper.mapOne(service.getById(id), new CurvePointResponseForUpdate());
+        ResponseCurvePointForUpdate response = GenericMapper.mapOne(service.getById(id), new ResponseCurvePointForUpdate());
         model.addAttribute("curvePoint", response);
 
         return "curvePoint/update";
@@ -63,7 +63,7 @@ public class CurveController {
 
         service.update(id, curvePoint);
 
-        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
+        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList()));
 
         return "redirect:/curvePoint/list";
     }
@@ -73,7 +73,7 @@ public class CurveController {
 
         service.deleteById(id);
 
-        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new CurvePointResponseForList()));
+        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList()));
 
         return "redirect:/curvePoint/list";
     }

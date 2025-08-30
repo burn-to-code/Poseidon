@@ -1,8 +1,8 @@
 package com.poseidon.controllers;
 
 import com.poseidon.domain.DTO.GenericMapper;
-import com.poseidon.domain.DTO.TradeResponseForList;
-import com.poseidon.domain.DTO.TradeResponseForUpdate;
+import com.poseidon.domain.DTO.ResponseTradeForList;
+import com.poseidon.domain.DTO.ResponseTradeForUpdate;
 import com.poseidon.domain.Trade;
 import com.poseidon.services.interfaces.CrudInterface;
 import jakarta.validation.Valid;
@@ -22,7 +22,7 @@ public class TradeController {
     @RequestMapping("/trade/list")
     public String home(Model model)
     {
-        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new TradeResponseForList()));
+        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new ResponseTradeForList()));
         return "trade/list";
     }
 
@@ -40,7 +40,7 @@ public class TradeController {
 
         service.save(trade);
 
-        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new TradeResponseForList()));
+        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new ResponseTradeForList()));
 
         return "redirect:/trade/list";
     }
@@ -48,7 +48,7 @@ public class TradeController {
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
-        model.addAttribute("trade", GenericMapper.mapOne(service.getById(id), new TradeResponseForUpdate()));
+        model.addAttribute("trade", GenericMapper.mapOne(service.getById(id), new ResponseTradeForUpdate()));
 
         return "trade/update";
     }
@@ -63,7 +63,7 @@ public class TradeController {
 
         service.update(id, trade);
 
-        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new TradeResponseForList()));
+        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new ResponseTradeForList()));
 
         return "redirect:/trade/list";
     }
@@ -73,7 +73,7 @@ public class TradeController {
 
         service.deleteById(id);
 
-        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new TradeResponseForList()));
+        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new ResponseTradeForList()));
 
         return "redirect:/trade/list";
     }

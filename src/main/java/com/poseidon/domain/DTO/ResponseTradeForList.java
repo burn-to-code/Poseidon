@@ -8,17 +8,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TradeResponseForUpdate implements ConvertibleDtoFromEntity<Trade, TradeResponseForUpdate>{
+public class ResponseTradeForList implements ConvertibleDtoFromEntity<Trade, ResponseTradeForList>{
     private Integer id;
     private String account;
     private String type;
     private Double buyQuantity;
 
-    public TradeResponseForUpdate() {
+    public ResponseTradeForList() {
     }
 
     @Override
-    public TradeResponseForUpdate fromEntity(Trade trade) {
-        return new TradeResponseForUpdate(trade.getId(), trade.getAccount(), trade.getType(), trade.getBuyQuantity());
+    public ResponseTradeForList fromEntity(Trade trade) {
+        return new ResponseTradeForList(trade.getId(), trade.getAccount(), trade.getType(), trade.getBuyQuantity());
     }
 }
