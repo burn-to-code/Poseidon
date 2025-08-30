@@ -1,10 +1,7 @@
 package com.poseidon.IT;
 
 import com.poseidon.IT.support.EntityTestUtils;
-import com.poseidon.IT.support.records.TestParams;
-import com.poseidon.IT.support.records.TestParamsWithEntity;
-import com.poseidon.IT.support.records.TestParamsWithEntityAndParam;
-import com.poseidon.IT.support.records.TestParamsWithEntityAndProperty;
+import com.poseidon.IT.support.records.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +74,26 @@ public class CrudIT extends SetUpIT{
         assertTrue(entityTestUtils.isPresentEntity(entity));
     }
 
+    @ParameterizedTest
+    @MethodSource("com.poseidon.IT.support.TestDataProviders#entityProviderForAddValidateButBindingResultHasErrors")
+    void testCrudOperationsAddValidate_WhenBidingResultIsNegative(TestParamWithEntityAndParamAndErrors params) throws Exception {
+
+        Object entity = params.entitySupplier().get();
+        Map<String,String> modelAttribute = params.modelAttributeSupplier().apply(entity);
+
+        MockHttpServletRequestBuilder requestBuilder = post(params.url());
+        modelAttribute.forEach(requestBuilder::param);
+
+        mockMvc.perform(requestBuilder.with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(params.view()))
+                .andExpect(model().attributeExists(params.modelName()))
+                .andExpect(model().attributeHasFieldErrors(
+                        params.modelName(),
+                        params.errors().toArray(new String[0])
+                ));
+    }
+
     // ------------------ SHOW UPDATE FORM END POINT------------------
     @ParameterizedTest
     @MethodSource("com.poseidon.IT.support.TestDataProviders#entityProviderForShowUpdate")
@@ -112,6 +129,28 @@ public class CrudIT extends SetUpIT{
                 .andExpect(redirectedUrl(params.view()));
 
         assertTrue(entityTestUtils.isPresentEntity(entity));
+    }
+
+    @ParameterizedTest
+    @MethodSource("com.poseidon.IT.support.TestDataProviders#entityProviderForUpdateButBindingResultHasErrors")
+    void testCrudOperationsAddUpdate_WhenBidingResultIsNegative(TestParamWithEntityAndParamAndErrors params) throws Exception {
+
+        Object entity = params.entitySupplier().get();
+        Integer id = entityTestUtils.saveEntityWithDifferenceAndReturnId(entity);
+
+        Map<String,String> modelAttribute = params.modelAttributeSupplier().apply(entity);
+
+        MockHttpServletRequestBuilder requestBuilder = post(params.url() + "/" + id);
+        modelAttribute.forEach(requestBuilder::param);
+
+        mockMvc.perform(requestBuilder.with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(params.view()))
+                .andExpect(model().attributeExists(params.modelName()))
+                .andExpect(model().attributeHasFieldErrors(
+                        params.modelName(),
+                        params.errors().toArray(new String[0])
+                ));
     }
 
     // ------------------ DELETE END POINT------------------

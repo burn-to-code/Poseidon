@@ -36,6 +36,7 @@ public class RatingController {
     @PostMapping("/rating/validate")
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("rating", rating);
             return "rating/add";
         }
 
@@ -57,6 +58,7 @@ public class RatingController {
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("rating", rating);
             return "rating/update";
         }
 

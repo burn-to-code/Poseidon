@@ -1,11 +1,9 @@
 package com.poseidon.IT.support;
-import com.poseidon.IT.support.records.TestParams;
-import com.poseidon.IT.support.records.TestParamsWithEntity;
-import com.poseidon.IT.support.records.TestParamsWithEntityAndParam;
-import com.poseidon.IT.support.records.TestParamsWithEntityAndProperty;
+import com.poseidon.IT.support.records.*;
 import com.poseidon.domain.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -218,6 +216,135 @@ public class TestDataProviders {
         );
     }
 
+    public static Stream<TestParamWithEntityAndParamAndErrors> entityProviderForAddValidateButBindingResultHasErrors() {
+        return Stream.of(
+                new TestParamWithEntityAndParamAndErrors("/bidList/validate", "bidList/add",
+                        () -> {
+                            BidList b = new BidList();
+                            b.setAccount("newUniqueAccount");
+                            b.setType("type1");
+                            b.setBidQuantity(100.0);
+                            return b;
+                        },
+                        entity -> {
+                            BidList b = (BidList) entity;
+                            Map<String,String> map = new HashMap<>();
+                            map.put("account", "");
+                            map.put("type", null);
+                            map.put("bidQuantity", String.valueOf(b.getBidQuantity()));
+                            return map;
+                        },
+                        "bidList",
+                        List.of("account", "type")
+                ),
+                new TestParamWithEntityAndParamAndErrors("/curvePoint/validate", "curvePoint/add",
+                        () -> {
+                            CurvePoint c = new CurvePoint();
+                            c.setCurveId(127);
+                            c.setTerm(10.0);
+                            c.setValue(50.0);
+                            return c;
+                        },
+                        entity -> {
+                            CurvePoint c = (CurvePoint) entity;
+                            Map<String,String> map = new HashMap<>();
+                            map.put("curveId", "");
+                            map.put("term", String.valueOf(c.getTerm()));
+                            map.put("value", String.valueOf(c.getValue()));
+                            return map;
+                        },
+                        "curvePoint",
+                        List.of("curveId")
+                ),
+                new TestParamWithEntityAndParamAndErrors("/rating/validate", "rating/add",
+                        () -> {
+                            Rating r = new Rating();
+                            r.setMoodysRating("newUniqueMoodysRating");
+                            r.setSandPRating("SP1");
+                            r.setFitchRating("Fitch1");
+                            r.setOrderNumber(1);
+                            return r;
+                        },
+                        entity -> {
+                            Map<String,String> map = new HashMap<>();
+                            map.put("moodysRating", "");
+                            map.put("sandPRating", null);
+                            map.put("fitchRating", "");
+                            map.put("orderNumber", String.valueOf(-5));
+                            return map;
+                        },
+                        "rating",
+                        List.of("moodysRating", "sandPRating", "fitchRating", "orderNumber")
+
+                ),
+                new TestParamWithEntityAndParamAndErrors("/ruleName/validate", "ruleName/add",
+                        () -> {
+                            RuleName r = new RuleName();
+                            r.setName("NewUniqueName");
+                            r.setDescription("aaa");
+                            r.setJson("json");
+                            r.setTemplate("template");
+                            r.setSqlPart("sqlPart");
+                            r.setSqlStr("sqlStr");
+                            return r;
+                        },
+                        entity -> {
+                            RuleName c = (RuleName) entity;
+                            Map<String,String> map = new HashMap<>();
+                            map.put("name", "");
+                            map.put("description", String.valueOf(c.getDescription()));
+                            map.put("json", String.valueOf(c.getJson()));
+                            map.put("template", String.valueOf(c.getTemplate()));
+                            map.put("sqlPart", String.valueOf(c.getSqlPart()));
+                            map.put("sqlStr", String.valueOf(c.getSqlStr()));
+                            return map;
+                        },
+                        "ruleName",
+                        List.of("name")
+                ),
+                new TestParamWithEntityAndParamAndErrors("/trade/validate", "trade/add",
+                        () -> {
+                            Trade t = new Trade();
+                            t.setAccount("newUniqueAccount");
+                            t.setType("type");
+                            t.setBuyQuantity(100.0);
+                            t.setSellQuantity(100.0);
+                            return t;
+                        },
+                        entity -> {
+                            Map<String,String> map = new HashMap<>();
+                            map.put("account", "");
+                            map.put("type", null);
+                            map.put("buyQuantity", String.valueOf(-5.0));
+                            map.put("sellQuantity", String.valueOf(100));
+                            return map;
+                        },
+                        "trade",
+                        List.of("account", "type", "buyQuantity")
+                ),
+                new TestParamWithEntityAndParamAndErrors("/user/validate", "user/add",
+                        () -> {
+                            User u = new User();
+                            u.setUsername("newUniqueUsername");
+                            u.setFullname("Test User");
+                            u.setPassword("NewPassword02!");
+                            u.setRole("USER");
+                            return u;
+                        },
+                        entity -> {
+                            Map<String,String> map = new HashMap<>();
+                            map.put("username", "");
+                            map.put("fullname", null);
+                            map.put("password", null);
+                            map.put("role", "");
+                            return map;
+                        },
+                        "user",
+                        List.of("username", "fullname", "password", "role")
+                )
+        );
+    }
+
     public static Stream<TestParamsWithEntityAndParam> entityProviderForUpdateValidate() {
         return Stream.of(
                 new TestParamsWithEntityAndParam(
@@ -345,6 +472,135 @@ public class TestDataProviders {
                             map.put("password", String.valueOf(c.getPassword()));
                             return map;
                         }
+                )
+        );
+    }
+
+    public static Stream<TestParamWithEntityAndParamAndErrors> entityProviderForUpdateButBindingResultHasErrors() {
+        return Stream.of(
+                new TestParamWithEntityAndParamAndErrors("/bidList/update", "bidList/update",
+                        () -> {
+                            BidList b = new BidList();
+                            b.setAccount("newUniqueAccount");
+                            b.setType("type1");
+                            b.setBidQuantity(100.0);
+                            return b;
+                        },
+                        entity -> {
+                            BidList b = (BidList) entity;
+                            Map<String, String> map = new HashMap<>();
+                            map.put("account", "");
+                            map.put("type", null);
+                            map.put("bidQuantity", String.valueOf(b.getBidQuantity()));
+                            return map;
+                        },
+                        "bidList",
+                        List.of("account", "type")
+                ),
+                new TestParamWithEntityAndParamAndErrors("/curvePoint/update", "curvePoint/update",
+                        () -> {
+                            CurvePoint c = new CurvePoint();
+                            c.setCurveId(127);
+                            c.setTerm(10.0);
+                            c.setValue(50.0);
+                            return c;
+                        },
+                        entity -> {
+                            CurvePoint c = (CurvePoint) entity;
+                            Map<String, String> map = new HashMap<>();
+                            map.put("curveId", "");
+                            map.put("term", String.valueOf(c.getTerm()));
+                            map.put("value", String.valueOf(c.getValue()));
+                            return map;
+                        },
+                        "curvePoint",
+                        List.of("curveId")
+                ),
+                new TestParamWithEntityAndParamAndErrors("/rating/update", "rating/update",
+                        () -> {
+                            Rating r = new Rating();
+                            r.setMoodysRating("newUniqueMoodysRating");
+                            r.setSandPRating("SP1");
+                            r.setFitchRating("Fitch1");
+                            r.setOrderNumber(1);
+                            return r;
+                        },
+                        entity -> {
+                            Map<String, String> map = new HashMap<>();
+                            map.put("moodysRating", "");
+                            map.put("sandPRating", null);
+                            map.put("fitchRating", "");
+                            map.put("orderNumber", String.valueOf(-5));
+                            return map;
+                        },
+                        "rating",
+                        List.of("moodysRating", "sandPRating", "fitchRating", "orderNumber")
+
+                ),
+                new TestParamWithEntityAndParamAndErrors("/ruleName/update", "ruleName/update",
+                        () -> {
+                            RuleName r = new RuleName();
+                            r.setName("NewUniqueName");
+                            r.setDescription("aaa");
+                            r.setJson("json");
+                            r.setTemplate("template");
+                            r.setSqlPart("sqlPart");
+                            r.setSqlStr("sqlStr");
+                            return r;
+                        },
+                        entity -> {
+                            RuleName c = (RuleName) entity;
+                            Map<String, String> map = new HashMap<>();
+                            map.put("name", "");
+                            map.put("description", String.valueOf(c.getDescription()));
+                            map.put("json", String.valueOf(c.getJson()));
+                            map.put("template", String.valueOf(c.getTemplate()));
+                            map.put("sqlPart", String.valueOf(c.getSqlPart()));
+                            map.put("sqlStr", String.valueOf(c.getSqlStr()));
+                            return map;
+                        },
+                        "ruleName",
+                        List.of("name")
+                ),
+                new TestParamWithEntityAndParamAndErrors("/trade/update", "trade/update",
+                        () -> {
+                            Trade t = new Trade();
+                            t.setAccount("newUniqueAccount");
+                            t.setType("type");
+                            t.setBuyQuantity(100.0);
+                            t.setSellQuantity(100.0);
+                            return t;
+                        },
+                        entity -> {
+                            Map<String, String> map = new HashMap<>();
+                            map.put("account", "");
+                            map.put("type", null);
+                            map.put("buyQuantity", String.valueOf(-5.0));
+                            map.put("sellQuantity", String.valueOf(100));
+                            return map;
+                        },
+                        "trade",
+                        List.of("account", "type", "buyQuantity")
+                ),
+                new TestParamWithEntityAndParamAndErrors("/user/update", "user/update",
+                        () -> {
+                            User u = new User();
+                            u.setUsername("newUniqueUsername");
+                            u.setFullname("Test User");
+                            u.setPassword("NewPassword02!");
+                            u.setRole("USER");
+                            return u;
+                        },
+                        entity -> {
+                            Map<String, String> map = new HashMap<>();
+                            map.put("username", "");
+                            map.put("fullname", null);
+                            map.put("password", null);
+                            map.put("role", "");
+                            return map;
+                        },
+                        "user",
+                        List.of("username", "fullname", "password", "role")
                 )
         );
     }

@@ -43,6 +43,7 @@ public class UserController {
             model.addAttribute("users", service.getAll());
             return "redirect:/user/list";
         }
+        model.addAttribute("user", user);
         return "user/add";
     }
 
@@ -58,6 +59,7 @@ public class UserController {
     public String updateUser(@PathVariable("id") Integer id, @Valid User user,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("user", user);
             return "user/update";
         }
 

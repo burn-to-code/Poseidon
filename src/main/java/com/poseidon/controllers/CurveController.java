@@ -37,6 +37,7 @@ public class CurveController {
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("curvePoint", curvePoint);
             return "curvePoint/add";
         }
 
@@ -59,6 +60,7 @@ public class CurveController {
     public String updateBid(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("curvePoint", curvePoint);
             return "curvePoint/update";
         }
 

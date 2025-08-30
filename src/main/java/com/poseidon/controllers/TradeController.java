@@ -37,6 +37,7 @@ public class TradeController {
     @PostMapping("/trade/validate")
     public String validate(@Valid Trade trade, BindingResult result, Model model) {
         if(result.hasErrors()) {
+            model.addAttribute("trade", trade);
             return "trade/add";
         }
 
@@ -59,6 +60,7 @@ public class TradeController {
     public String updateTrade(@PathVariable("id") Integer id, @Valid Trade trade,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("trade", trade);
             return "trade/update";
         }
 
