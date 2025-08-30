@@ -1,6 +1,7 @@
 package com.poseidon.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class BidList implements BaseEntity<BidList>{
     private String type;
 
     @Column(name = "bidQuantity")
+    @Min(value = 0, message = "Bid quantity should be greater than zero")
     private Double bidQuantity;
 
     @Column(name = "askQuantity")

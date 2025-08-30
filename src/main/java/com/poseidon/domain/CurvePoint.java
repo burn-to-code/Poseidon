@@ -1,6 +1,8 @@
 package com.poseidon.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ public class CurvePoint  implements BaseEntity<CurvePoint>{
 
     @Column(name = "CurveId")
     @NotNull(message = "must not be null")
+    @Min(value = 0, message = "Curve Id should be greater than zero")
+    @Max(value = 127, message = "Curve Id should be less than 127")
     private Integer curveId;
 
     @Column(name = "asOfDate")

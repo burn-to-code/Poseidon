@@ -1,6 +1,7 @@
 package com.poseidon.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -25,7 +26,7 @@ public class Rating implements BaseEntity<Rating>{
     private String moodysRating;
 
     @Size(max = 125)
-    @NotBlank(message = "sandp is mandatory")
+    @NotBlank(message = "sandPRating is mandatory")
     @Column(name = "sandPRating", length = 125)
     private String sandPRating;
 
@@ -35,8 +36,9 @@ public class Rating implements BaseEntity<Rating>{
     private String fitchRating;
 
     @Min(value = 1, message = "order number must be greater than 0")
+    @Max(value = 127, message = "order number must be less than 127")
     @Column(name = "orderNumber")
-    private int orderNumber;
+    private Integer orderNumber;
 
     public Rating(String moodysRating, String sandPRating, String fitchRating, int orderNumber) {
         this.moodysRating = moodysRating;
