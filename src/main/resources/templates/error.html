@@ -5,9 +5,9 @@
     <title>Erreur</title>
 </head>
 <body>
-    <h3>Une erreur est survenue</h3>
+    <h3>An error is occurred</h3>
     Logged in user: <b th:inline="text"  class="user"><span sec:authentication="principal.username"></span> </b>
-    <p th:text="${errorMsg}">Erreur inconnue</p>
-    <a th:href="@{/bidList/list}">Retour à la liste</a>
+    <p th:text="${errorMsg}">Something went wrong</p>
+    <a th:href="@{/bidList/list}">Return to home</a>
 </body>
 </html>

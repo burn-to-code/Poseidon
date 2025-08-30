@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
-        String message = "Une erreur est survenue. Contactez l'administrateur.";
+        String message = "An error occurred: Please contact Admin or try again later";
 
         log.error(message, ex);
 
