@@ -31,13 +31,15 @@ class TradeControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(tradeController).build();
     }
 
+    private Trade createSimpleTradeWithId() {
+        Trade trade = new Trade("Acc", "Type", 10.0, 20.0);
+        trade.setTradeId(1);
+        return trade;
+    }
+
     @Test
     void testHome_returnsTradeListView() throws Exception {
-        Trade trade = new Trade();
-        trade.setTradeId(1);
-        trade.setAccount("Account1");
-        trade.setType("Type1");
-        trade.setBuyQuantity(100.0);
+        Trade trade = createSimpleTradeWithId();
 
         when(crudService.getAll()).thenReturn(List.of(trade));
 
@@ -58,19 +60,15 @@ class TradeControllerTest {
 
     @Test
     void testValidate_successRedirects() throws Exception {
-        Trade trade = new Trade();
-        trade.setTradeId(1);
-        trade.setAccount("Account1");
-        trade.setType("Type1");
-        trade.setBuyQuantity(100.0);
+        Trade trade = createSimpleTradeWithId();
 
         when(crudService.save(any(Trade.class))).thenReturn(trade);
         when(crudService.getAll()).thenReturn(List.of(trade));
 
         mockMvc.perform(post("/trade/validate")
-                        .param("account", "Account1")
-                        .param("type", "Type1")
-                        .param("buyQuantity", "100"))
+                        .param("account", trade.getAccount())
+                        .param("type", trade.getType())
+                        .param("buyQuantity", trade.getBuyQuantity().toString()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/trade/list"));
 
@@ -79,11 +77,7 @@ class TradeControllerTest {
 
     @Test
     void testShowUpdateForm_returnsUpdateView() throws Exception {
-        Trade trade = new Trade();
-        trade.setTradeId(1);
-        trade.setAccount("Account1");
-        trade.setType("Type1");
-        trade.setBuyQuantity(100.0);
+        Trade trade = createSimpleTradeWithId();
 
         when(crudService.getById(1)).thenReturn(trade);
 
@@ -97,14 +91,13 @@ class TradeControllerTest {
 
     @Test
     void testPostUpdateTrade_successRedirects() throws Exception {
-        Trade trade = new Trade();
-        trade.setTradeId(1);
+        Trade trade = createSimpleTradeWithId();
 
         mockMvc.perform(post("/trade/update/1")
-                        .param("tradeId", "1")
-                        .param("account", "Account1")
-                        .param("type", "Type1")
-                        .param("buyQuantity", "100"))
+                        .param("tradeId", trade.getTradeId().toString())
+                        .param("account", trade.getAccount())
+                        .param("type", trade.getType())
+                        .param("buyQuantity", trade.getBuyQuantity().toString()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/trade/list"));
 

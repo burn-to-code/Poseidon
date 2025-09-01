@@ -34,10 +34,16 @@ public class BidListControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(bidListController).build();
     }
 
-    @Test
-    public void testHome() throws Exception {
+    // Helper methods
+    private BidList createSimpleBidListWithId() {
         BidList bid = new BidList("Acc", "Type", 10d);
         bid.setBidListId(1);
+        return bid;
+    }
+
+    @Test
+    public void testHome() throws Exception {
+        BidList bid = createSimpleBidListWithId();
 
         when(crudService.getAll()).thenReturn(List.of(bid));
 
@@ -75,8 +81,7 @@ public class BidListControllerTest {
 
     @Test
     public void testShowUpdateForm() throws Exception {
-        BidList bid = new BidList("Acc", "Type", 10d);
-        bid.setBidListId(1);
+        BidList bid = createSimpleBidListWithId();
 
         when(crudService.getById(1)).thenReturn(bid);
 
@@ -90,8 +95,7 @@ public class BidListControllerTest {
 
     @Test
     public void testPostUpdateCurvePoint() throws Exception {
-        BidList bid = new BidList("Acc", "Type", 10d);
-        bid.setBidListId(1);
+        BidList bid = createSimpleBidListWithId();
 
 
         mockMvc.perform(post("/bidList/update/1")

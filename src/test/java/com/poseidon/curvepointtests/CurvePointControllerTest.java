@@ -34,10 +34,15 @@ public class CurvePointControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(curveController).build();
     }
 
-    @Test
-    public void testGetCurvePoints() throws Exception {
+    private CurvePoint createSimpleCurvePointWithId() {
         CurvePoint cp = new CurvePoint(10, 15.23, 11.33);
         cp.setId(1);
+        return cp;
+    }
+
+    @Test
+    public void testGetCurvePoints() throws Exception {
+        CurvePoint cp = createSimpleCurvePointWithId();
         when(crudService.getAll()).thenReturn(List.of(cp));
 
         mockMvc.perform(get("/curvePoint/list"))
@@ -74,8 +79,7 @@ public class CurvePointControllerTest {
 
     @Test
     public void testGetUpdateCurvePoint() throws Exception {
-        CurvePoint cp = new CurvePoint(10, 15.23, 11.33);
-        cp.setId(1);
+        CurvePoint cp = createSimpleCurvePointWithId();
         when(crudService.getById(1)).thenReturn(cp);
 
         mockMvc.perform(get("/curvePoint/update/1"))
@@ -88,8 +92,7 @@ public class CurvePointControllerTest {
 
     @Test
     public void testPostUpdateCurvePoint() throws Exception {
-        CurvePoint cp = new CurvePoint(10, 15.23, 11.33);
-        cp.setId(1);
+        CurvePoint cp = createSimpleCurvePointWithId();
 
         mockMvc.perform(post("/curvePoint/update/1")
                         .param("id", Objects.toString(cp.getId()))
