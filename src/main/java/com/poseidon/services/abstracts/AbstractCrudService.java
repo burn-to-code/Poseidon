@@ -66,8 +66,7 @@ public abstract class AbstractCrudService<MODEL extends BaseEntity<MODEL>> imple
     public MODEL getById(Integer id) {
         log.debug("Tentative de récupération de l'entité avec l'id {}", id);
 
-        Assert.notNull(id, "Id must not be null");
-        Assert.isTrue(id > 0, "Id must be greater than zero");
+        checkIdNotNullOrGreaterThan0(id);
 
         MODEL model = repository.findById(id).orElseThrow(() -> {
             log.error("Aucune entité trouvée avec l'id {}", id);
@@ -92,15 +91,15 @@ public abstract class AbstractCrudService<MODEL extends BaseEntity<MODEL>> imple
     /**
      * Sauvegarde une nouvelle entité.
      *
-     * @param model L'entité à sauvegarder. L'identifiant doit être nul pour indiquer qu'il s'agit d'une création.
+     * @param model L'entité qui est à sauvegarder. L'identifiant doit être nul pour indiquer qu'il s'agit d'une création.
      * @return L'entité sauvegardée avec son identifiant généré.
      * @throws IllegalArgumentException si le modèle est nul ou si l'identifiant n'est pas nul.
      */
     @Override
     public MODEL save(MODEL model) {
         log.debug("Tentative de sauvegarde d'une nouvelle entité : {}", model);
-        Assert.notNull(model, "Model must not be null");
-        Assert.isNull(model.getId(), "Id must be null");
+        
+        checkModelForSave(model);
 
         MODEL saved = repository.save(model);
 
@@ -119,9 +118,7 @@ public abstract class AbstractCrudService<MODEL extends BaseEntity<MODEL>> imple
     public void update(Integer id, MODEL model) {
         log.debug("Tentative de mise à jour de l'entité avec id {} : {}", id, model);
 
-        Assert.notNull(model, "Model must not be null");
-        Assert.notNull(id, "Id must not be null");
-        Assert.isTrue(id > 0, "Id must be greater than zero");
+        checkModelForUpdate(id, model);
 
         MODEL existingModel = getById(id);
         existingModel.update(model);
@@ -140,12 +137,45 @@ public abstract class AbstractCrudService<MODEL extends BaseEntity<MODEL>> imple
     public void deleteById(Integer id) {
         log.debug("Tentative de suppression de l'entité avec id {}", id);
 
-        Assert.notNull(id, "Id must not be null");
-        Assert.isTrue(id > 0, "Id must be greater than zero");
+        checkIdNotNullOrGreaterThan0(id);
 
         repository.deleteById(id);
 
         log.info("Entité avec id {} supprimée avec succès", id);
+    }
+
+
+    //helper methods
+
+    /**
+     *
+     * @param id id de l'entité
+     * @throws IllegalArgumentException si l'id est null ou inférieur à 1.
+     */
+    private void checkIdNotNullOrGreaterThan0(Integer id) {
+        Assert.notNull(id, "Id must not be null");
+        Assert.isTrue(id > 0, "Id must be greater than zero");
+    } 
+
+    /**
+     *
+     * @param model model de l'entité
+     * @throws IllegalArgumentException si le model est null ou id n'est pas null.
+     */
+    private void checkModelForSave(MODEL model) {
+        Assert.notNull(model, "Model must not be null");
+        Assert.isNull(model.getId(), "Id must be null");
+    }
+
+    /**
+     *
+     * @param id id de l'entité
+     * @param model model de l'entité
+     * @throws IllegalArgumentException si le model est null ou l'id est null ou inférieur à 1.
+     */
+    private void checkModelForUpdate(Integer id, MODEL model) {
+        Assert.notNull(model, "Model must not be null");
+        checkIdNotNullOrGreaterThan0(id);
     }
     
 }
