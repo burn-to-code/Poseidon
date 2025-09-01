@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Controller
 public class CurveController {
@@ -21,7 +23,7 @@ public class CurveController {
     @RequestMapping("/curvePoint/list")
     public String home(Model model) {
 
-        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList()));
+        model.addAttribute("curvePoints", mapList());
 
         return "curvePoint/list";
     }
@@ -39,7 +41,7 @@ public class CurveController {
         }
 
         service.save(curvePoint);
-        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList()));
+        model.addAttribute("curvePoints", mapList());
 
         return "redirect:/curvePoint/list";
     }
@@ -47,7 +49,7 @@ public class CurveController {
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
-        ResponseCurvePointForUpdate response = GenericMapper.mapOne(service.getById(id), new ResponseCurvePointForUpdate());
+        ResponseCurvePointForUpdate response = mapOne(id);
         model.addAttribute("curvePoint", response);
 
         return "curvePoint/update";
@@ -63,7 +65,7 @@ public class CurveController {
 
         service.update(id, curvePoint);
 
-        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList()));
+        model.addAttribute("curvePoints", mapList());
 
         return "redirect:/curvePoint/list";
     }
@@ -73,8 +75,18 @@ public class CurveController {
 
         service.deleteById(id);
 
-        model.addAttribute("curvePoints", GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList()));
+        model.addAttribute("curvePoints", mapList());
 
         return "redirect:/curvePoint/list";
+    }
+
+    // helper methods
+    private ResponseCurvePointForUpdate mapOne(Integer id) {
+        return GenericMapper.mapOne(service.getById(id), new ResponseCurvePointForUpdate());
+    }
+
+    // helper methods
+    private List<ResponseCurvePointForList> mapList() {
+        return GenericMapper.mapList(service.getAll(), new ResponseCurvePointForList());
     }
 }

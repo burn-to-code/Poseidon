@@ -23,7 +23,7 @@ public class BidListController {
 
     @RequestMapping("/bidList/list")
     public String home(Model model) {
-        List<ResponseBidListForList> bidList = GenericMapper.mapList(service.getAll(), new ResponseBidListForList());
+        List<ResponseBidListForList> bidList = mapList();
         model.addAttribute("bidLists", bidList);
         return "bidList/list";
     }
@@ -41,7 +41,7 @@ public class BidListController {
         }
 
         service.save(bid);
-        model.addAttribute("bidLists", GenericMapper.mapList(service.getAll(), new ResponseBidListForList()));
+        model.addAttribute("bidLists", mapList());
 
         return "redirect:/bidList/list";
     }
@@ -49,7 +49,7 @@ public class BidListController {
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
-        ResponseBidListForUpdate bidListUpdateDto = GenericMapper.mapOne(service.getById(id), new ResponseBidListForUpdate());
+        ResponseBidListForUpdate bidListUpdateDto = mapOne(id);
         model.addAttribute("bidList", bidListUpdateDto);
 
         return "bidList/update";
@@ -65,7 +65,7 @@ public class BidListController {
 
         service.update(id, bidList);
 
-        model.addAttribute("bidLists", GenericMapper.mapList(service.getAll(), new ResponseBidListForList()));
+        model.addAttribute("bidLists", mapList());
 
         return "redirect:/bidList/list";
     }
@@ -75,8 +75,18 @@ public class BidListController {
 
         service.deleteById(id);
 
-        model.addAttribute("bidLists", GenericMapper.mapList(service.getAll(), new ResponseBidListForList()));
+        model.addAttribute("bidLists", mapList());
 
         return "redirect:/bidList/list";
+    }
+
+    //helper methods
+    private ResponseBidListForUpdate mapOne(Integer id) {
+        return GenericMapper.mapOne(service.getById(id), new ResponseBidListForUpdate());
+    }
+
+    //helper methods
+    private List<ResponseBidListForList> mapList() {
+        return GenericMapper.mapList(service.getAll(), new ResponseBidListForList());
     }
 }

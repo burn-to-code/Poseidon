@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Controller
 @AllArgsConstructor
@@ -22,7 +24,7 @@ public class TradeController {
     @RequestMapping("/trade/list")
     public String home(Model model)
     {
-        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new ResponseTradeForList()));
+        model.addAttribute("trades", mapList());
         return "trade/list";
     }
 
@@ -40,7 +42,7 @@ public class TradeController {
 
         service.save(trade);
 
-        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new ResponseTradeForList()));
+        model.addAttribute("trades", mapList());
 
         return "redirect:/trade/list";
     }
@@ -48,7 +50,7 @@ public class TradeController {
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
 
-        model.addAttribute("trade", GenericMapper.mapOne(service.getById(id), new ResponseTradeForUpdate()));
+        model.addAttribute("trade", mapOne(id));
 
         return "trade/update";
     }
@@ -63,7 +65,7 @@ public class TradeController {
 
         service.update(id, trade);
 
-        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new ResponseTradeForList()));
+        model.addAttribute("trades", mapList());
 
         return "redirect:/trade/list";
     }
@@ -73,8 +75,18 @@ public class TradeController {
 
         service.deleteById(id);
 
-        model.addAttribute("trades", GenericMapper.mapList(service.getAll(), new ResponseTradeForList()));
+        model.addAttribute("trades", mapList());
 
         return "redirect:/trade/list";
+    }
+
+    //helper methods
+    private ResponseTradeForUpdate mapOne(Integer id) {
+        return GenericMapper.mapOne(service.getById(id), new ResponseTradeForUpdate());
+    }
+
+    //helper methods
+    private List<ResponseTradeForList> mapList() {
+        return GenericMapper.mapList(service.getAll(), new ResponseTradeForList());
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 public class UserController {
@@ -22,7 +24,7 @@ public class UserController {
     @RequestMapping("/user/list")
     public String home(Model model)
     {
-        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDtoForList()));
+        model.addAttribute("users", mapList());
         return "user/list";
     }
 
@@ -46,7 +48,7 @@ public class UserController {
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        ResponseUserDtoForUpdate user = GenericMapper.mapOne(service.getById(id), new ResponseUserDtoForUpdate());
+        ResponseUserDtoForUpdate user = mapOne(id);
         user.setPassword("");
         model.addAttribute("user", user);
         return "user/update";
@@ -65,14 +67,22 @@ public class UserController {
 
         service.update(id, user);
 
-        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDtoForList()));
+        model.addAttribute("users", mapList());
         return "redirect:/user/list";
     }
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
         service.deleteById(id);
-        model.addAttribute("users", GenericMapper.mapList(service.getAll(), new ResponseUserDtoForList()));
+        model.addAttribute("users", mapList());
         return "redirect:/user/list";
+    }
+    
+    private ResponseUserDtoForUpdate mapOne(Integer id) {
+        return GenericMapper.mapOne(service.getById(id), new ResponseUserDtoForUpdate());
+    }
+    
+    private List<ResponseUserDtoForList> mapList() {
+        return GenericMapper.mapList(service.getAll(), new ResponseUserDtoForList());
     }
 }
