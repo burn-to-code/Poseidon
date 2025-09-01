@@ -19,6 +19,6 @@ public class GlobalExceptionHandlerTest {
         String view = handler.handleException(ex, model);
 
         assertEquals("error", view);
-        assertEquals("Une erreur est survenue. Contactez l'administrateur.", model.getAttribute("errorMsg"));
+        assertEquals("An error occurred: Please contact Admin or try again later", model.getAttribute("errorMsg"));
     }
 }

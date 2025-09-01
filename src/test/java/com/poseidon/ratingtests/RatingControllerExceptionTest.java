@@ -24,6 +24,8 @@ class RatingControllerExceptionTest {
 
     private MockMvc mockMvc;
 
+    private final String ERROR_MESSAGE = "An error occurred: Please contact Admin or try again later";
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
@@ -43,7 +45,7 @@ class RatingControllerExceptionTest {
                         .param("sandPRating", "AAA"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -53,7 +55,7 @@ class RatingControllerExceptionTest {
         mockMvc.perform(get("/rating/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -67,7 +69,7 @@ class RatingControllerExceptionTest {
                         .param("sandPRating", "AAA"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -77,6 +79,6 @@ class RatingControllerExceptionTest {
         mockMvc.perform(get("/rating/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 }

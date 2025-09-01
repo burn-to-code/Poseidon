@@ -25,6 +25,8 @@ public class BidListControllerExceptionTest {
 
     private MockMvc mockMvc;
 
+    private final String ERROR_MESSAGE = "An error occurred: Please contact Admin or try again later";
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
@@ -45,7 +47,7 @@ public class BidListControllerExceptionTest {
                         .param("bidQuantity", "10"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -56,7 +58,7 @@ public class BidListControllerExceptionTest {
         mockMvc.perform(get("/bidList/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -71,7 +73,7 @@ public class BidListControllerExceptionTest {
                 .param("bidQuantity", "10"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -81,6 +83,6 @@ public class BidListControllerExceptionTest {
         mockMvc.perform(get("/bidList/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 }

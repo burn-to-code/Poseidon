@@ -25,6 +25,8 @@ public class CurvePointControllerExceptionTest {
 
     private MockMvc mockMvc;
 
+    private final String ERROR_MESSAGE = "An error occurred: Please contact Admin or try again later";
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
@@ -45,7 +47,7 @@ public class CurvePointControllerExceptionTest {
                         .param("value", "100.0"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -57,7 +59,7 @@ public class CurvePointControllerExceptionTest {
         mockMvc.perform(get("/curvePoint/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -73,7 +75,7 @@ public class CurvePointControllerExceptionTest {
                         .param("value", "100.0"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     @Test
@@ -85,6 +87,6 @@ public class CurvePointControllerExceptionTest {
         mockMvc.perform(get("/curvePoint/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 }

@@ -24,6 +24,8 @@ class UserControllerExceptionTest {
 
     private MockMvc mockMvc;
 
+    private final String ERROR_MESSAGE = "An error occurred: Please contact Admin or try again later";
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
@@ -44,7 +46,7 @@ class UserControllerExceptionTest {
                         .param("role", "USER"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     // ------------------ /user/update/{id} GET ------------------
@@ -55,7 +57,7 @@ class UserControllerExceptionTest {
         mockMvc.perform(get("/user/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     // ------------------ /user/update/{id} POST ------------------
@@ -70,7 +72,7 @@ class UserControllerExceptionTest {
                         .param("role", "USER"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 
     // ------------------ /user/delete/{id} ------------------
@@ -81,6 +83,6 @@ class UserControllerExceptionTest {
         mockMvc.perform(get("/user/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attribute("errorMsg", "Une erreur est survenue. Contactez l'administrateur."));
+                .andExpect(model().attribute("errorMsg", ERROR_MESSAGE));
     }
 }
