@@ -55,7 +55,7 @@ public class EntityTestUtils {
             b.setAccount("newUniqueAccount17118");
             return bidListRepository.save(b).getId();
         } else if (entity instanceof CurvePoint c) {
-            c.setCurveId(1272);
+            c.setCurveId(126);
             return curvePointRepository.save(c).getId();
         } else if (entity instanceof Rating r) {
             r.setMoodysRating("newUniqueMoodysRating17118");
